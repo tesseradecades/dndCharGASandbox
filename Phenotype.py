@@ -125,7 +125,7 @@ class Phenotype:
         self.charismaModifier = self.getModifier(self.charismaScore)
     
     def getModifier(self, score: int)->int:
-        return (score - 10)/2
+        return (score - 10)//2
     
     def __str__(self) -> str:
         ret = f"Race:\t{self.race}\
