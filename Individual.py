@@ -35,26 +35,18 @@ class Individual:
     
     def getOffensiveChallengeRating(self,phenotype) -> int:
         return 0
-    
-    def getPointChromosome(self,point: int) -> array:
-        stop = point * 5
-        start = stop - 5
-        return self.genes[start:stop]
-    
-    def getRaceChromosome(self) -> array:
-        start = 5*POINTS
-        return self.genes[start:start+RACE_CHROMOSOME_LENGTH]
-    def getClassChromosome(self) -> array:
-        start = (5*POINTS)+RACE_CHROMOSOME_LENGTH
-        return self.genes[start:start+CLASS_CHROMOSOME_LENGTH]
-    
+        
     def flipBit(self,bit: int):
         ix = bit-1
         if(self.genes[ix] == 0):
             self.genes[ix] = 1
         else:
             self.genes[ix] = 0
-
+    def __str__(self) -> str:
+        ret = ""
+        for g in self.genes:
+            ret += str(g)
+        return ret
     
 
 
