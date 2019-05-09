@@ -60,7 +60,7 @@ def makeDarkElf(individual):
 def main():
     individual = Individual(array('b',[0]*Phenotype.GENOME_LENGTH))
     print(Phenotype.GENOME_LENGTH)
-    makeWoodElf(individual)
+    makeDarkElf(individual)
     print(individual)
     
 

@@ -99,9 +99,22 @@ class WoodElf(Elf):
         return raceAbilities
     def __str__(self) -> str:
         return "Wood Elf"
+class DarkElf(Elf):
+    def getScoreIncreases(self)->dict:
+        scoreIncreases = super(DarkElf,self).getScoreIncreases()
+        scoreIncreases[Abilities.CHARISMA]=1
+        return scoreIncreases
+    def getRaceAbilities(self)->set:
+        raceAbilities = super(DarkElf,self).getRaceAbilities()
+        raceAbilities.update("Superior Darkvision","Drow Magic")
+        return raceAbilities
+    def getWeaponProficiencies(self)->set:
+        return Weapons.DROW_WEAPON_TRAINING
+    def __str__(self) -> str:
+        return "Dark Elf"
 RACE_MAP = {
     0:HillDwarf(),1:MountainDwarf(),
-    2:HighElf(), 3:WoodElf(), 4: "Dark Elf",
+    2:HighElf(), 3:WoodElf(), 4:DarkElf(),
     5:"Lightfoot Halfling", 6:"Stout Halfling",
     7: "Human",
     8:"Dragonborn",
