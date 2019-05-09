@@ -1,10 +1,17 @@
 from array import array
 import Abilities
+import Background
 import CharacterClass
 import Race
 import Skills
 
 POINTS = 27
+STRENGTH = Abilities.STRENGTH
+DEXTERITY = Abilities.DEXTERITY
+CONSTITUTION = Abilities.CONSTITUTION
+INTELLIGENCE = Abilities.INTELLIGENCE
+WISDOM = Abilities.WISDOM
+CHARISMA = Abilities.CHARISMA
 
 RACE_MAP = {
     0:"Hill Dwarf",1:"Mountain Dwarf",
@@ -17,6 +24,22 @@ RACE_MAP = {
     12:"Half-Orc",
     13:"Tiefling"
     }
+
+BACKGROUND_MAP = {
+    0:"Acolyte",
+    1:"Charlatan",
+    2:"Criminal",
+    3:"Entertainer",
+    4:"Folk Hero",
+    5:"Guild Artisan",
+    6:"Hermit",
+    7:"Noble",
+    8:"Outlander",
+    9:"Sage",
+    10:"Sailor",
+    11:"Soldier",
+    12:"Urchin"
+}
 
 CLASS_MAP = {
     0:"Berserker Barbarian", 1: "Totem Barbarian",
@@ -40,34 +63,35 @@ class Phenotype:
     proficiency = 6
 
     race = None
+    background = None
     characterClass = None
 
     #Ability Scores
     abilityScores = {
-        Abilities.STRENGTH:0,
-        Abilities.DEXTERITY:0,
-        Abilities.CONSTITUTION:0,
-        Abilities.INTELLIGENCE:0,
-        Abilities.WISDOM:0,
-        Abilities.CHARISMA:0
+        STRENGTH:0,
+        DEXTERITY:0,
+        CONSTITUTION:0,
+        INTELLIGENCE:0,
+        WISDOM:0,
+        CHARISMA:0
     }
 
     #Ability Score Modifiers
     abilityScoreModifiers = {
-        Abilities.STRENGTH:0,
-        Abilities.DEXTERITY:0,
-        Abilities.CONSTITUTION:0,
-        Abilities.INTELLIGENCE:0,
-        Abilities.WISDOM:0,
-        Abilities.CHARISMA:0
+        STRENGTH:0,
+        DEXTERITY:0,
+        CONSTITUTION:0,
+        INTELLIGENCE:0,
+        WISDOM:0,
+        CHARISMA:0
     }
     savingThrows = {
-        Abilities.STRENGTH:0,
-        Abilities.DEXTERITY:0,
-        Abilities.CONSTITUTION:0,
-        Abilities.INTELLIGENCE:0,
-        Abilities.WISDOM:0,
-        Abilities.CHARISMA:0
+        STRENGTH:0,
+        DEXTERITY:0,
+        CONSTITUTION:0,
+        INTELLIGENCE:0,
+        WISDOM:0,
+        CHARISMA:0
     }
     #Skill Modifiers
     skillModifiers = {
@@ -95,7 +119,8 @@ class Phenotype:
     #Derives Stats
     armorClass = 0
     hitPoints = 0
-    movement = 0
+    speed = 0
+    passivePerception = 0
 
     #Proficiencies
     armorProficiencies = set()
@@ -114,8 +139,13 @@ class Phenotype:
             start = stop - 5
             pointChromosomes.append(self.getChromosome(genes,start,stop))
         
+        #Get Background Chromosome
+        backgroundStart = 5*POINTS
+        backgroundStop = backgroundStart+len(BACKGROUND_MAP)-1
+        backgroundChromosome = self.getChromosome(genes,backgroundStart,backgroundStop)
+
         #Get Race Chromosome
-        raceStart = 5*POINTS
+        raceStart = backgroundStop
         raceEnd = raceStart+len(RACE_MAP)-1
         raceChromosome = self.getChromosome(genes,raceStart,raceEnd)
         #Get Class Chromosome
@@ -130,16 +160,24 @@ class Phenotype:
         self.renderScoresFromPoints(pointMap)
         #Adjust Stats by Race
         self.race = Race.Race()#RACE_MAP[sumArray(raceChromosome)]
+
+        #Adjust Stats by Background
+        self.background = Background.Background()#BACKGROUND_MAP[sumArray(backgroundChromosome)]
+        for skill in self.background.skillProficiencies:
+            self.skillProficiencies.add(skill)
+
         #Adjust Stats by Class
         self.characterClass = CharacterClass.CharacterClass()#CLASS_MAP[sumArray(classChromosome)]
         self.renderDerivedStats()
 
     def __str__(self) -> str:
         ret = f"Race:\t{self.race}\
+            \nBackground:\t{self.background}\
             \nClass:\t{self.characterClass}\
             \nHit Points:\t{self.hitPoints}\
             \nArmor Class:\t{self.armorClass}\
-            \nMovement:\t{self.movement}\
+            \nMovement:\t{self.speed}\
+            \nPassive Perception:\t{self.passivePerception}\
             \nScores:\t{self.abilityScores}\
             \nModifiers:\t{self.abilityScoreModifiers}\
             \nSaving Throws:\t{self.savingThrows}\
@@ -152,30 +190,32 @@ class Phenotype:
     def renderScoresFromPoints(self, pointMap:dict):
         scores = self.abilityScores
         renderScore = self.renderScore
-        scores[Abilities.STRENGTH] = renderScore(pointMap[0])
-        scores[Abilities.DEXTERITY] = renderScore(pointMap[1])
-        scores[Abilities.CONSTITUTION] = renderScore(pointMap[2])
-        scores[Abilities.INTELLIGENCE] = renderScore(pointMap[3])
-        scores[Abilities.WISDOM] = renderScore(pointMap[4])
-        scores[Abilities.CHARISMA] = renderScore(pointMap[5])
+        scores[STRENGTH] = renderScore(pointMap[0])
+        scores[DEXTERITY] = renderScore(pointMap[1])
+        scores[CONSTITUTION] = renderScore(pointMap[2])
+        scores[INTELLIGENCE] = renderScore(pointMap[3])
+        scores[WISDOM] = renderScore(pointMap[4])
+        scores[CHARISMA] = renderScore(pointMap[5])
 
     def renderScore(self, points: int)-> int:
-        score = 8
+        if(points == 0):
+            return 8
         if(points <= 5):
-            score+points
-        elif(points == 6):
-            score+=5
-        elif(points <= 8):
-            score+=6
-        elif(points <= 11):
-            score+=7
-        elif(points <=14):
-            score+=8
-        elif(points <=18):
-            score+=9
-        elif(points > 18):
-            score+=10
-        return score
+            return 8+points
+        if(points == 6):
+            return 13
+        if(points <= 8):
+            return 14
+        if(points <= 11):
+            return 15
+        if(points <=14):
+            return 16
+        if(points <=18):
+            return 17
+        if(points > 18):
+            return 18
+        else:
+            return 8
 
     def renderDerivedStats(self):
         #Modifiers
@@ -189,32 +229,36 @@ class Phenotype:
             self.savingThrows[modifier] = mod
         #Skills
         for skill in Skills.STR_SKILLS:
-            mod = self.abilityScoreModifiers[Abilities.STRENGTH]
+            mod = self.abilityScoreModifiers[STRENGTH]
             if(skill in self.skillProficiencies):
                 mod+=self.proficiency
             self.skillModifiers[skill] = mod
+        dexMod = self.abilityScoreModifiers[DEXTERITY]
         for skill in Skills.DEX_SKILLS:
-            mod = self.abilityScoreModifiers[Abilities.DEXTERITY]
+            mod = dexMod
             if(skill in self.skillProficiencies):
                 mod+=self.proficiency
             self.skillModifiers[skill] = mod
         for skill in Skills.INT_SKILLS:
-            mod = self.abilityScoreModifiers[Abilities.INTELLIGENCE]
+            mod = self.abilityScoreModifiers[INTELLIGENCE]
             if(skill in self.skillProficiencies):
                 mod+=self.proficiency
             self.skillModifiers[skill] = mod
+        wisMod = self.abilityScoreModifiers[WISDOM]
         for skill in Skills.WIS_SKILLS:
-            mod = self.abilityScoreModifiers[Abilities.WISDOM]
+            mod = wisMod
             if(skill in self.skillProficiencies):
                 mod+=self.proficiency
             self.skillModifiers[skill] = mod
         for skill in Skills.CHA_SKILLS:
-            mod = self.abilityScoreModifiers[Abilities.CHARISMA]
+            mod = self.abilityScoreModifiers[CHARISMA]
             if(skill in self.skillProficiencies):
                 mod+=self.proficiency
             self.skillModifiers[skill] = mod
-        self.armorClass = 10+self.abilityScoreModifiers[Abilities.DEXTERITY]
-        self.hitPoints = 4+self.abilityScoreModifiers[Abilities.CONSTITUTION]
+        
+        self.armorClass = 10+dexMod
+        self.hitPoints = 4+self.abilityScoreModifiers[CONSTITUTION]
+        self.passivePerception = 10+wisMod
 
 def sumArray(a:array)->int:
     total = 0
@@ -226,7 +270,9 @@ def getModifier(score:int)->int:
     return (score-10)//2
 
 def main(): 
-    print(Phenotype(array('b',[0]*188)))
+    GENOME_LENGTH = (5*POINTS)+(len(BACKGROUND_MAP)-1)+(len(RACE_MAP)-1)+(len(CLASS_MAP)-1)
+
+    print(Phenotype(array('b',[0]*GENOME_LENGTH)))
 
 
 if __name__ == "__main__":
