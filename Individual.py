@@ -38,11 +38,13 @@ class Individual:
             self.genes[ix] = 1
         else:
             self.genes[ix] = 0
-        self.phenotype = Phenotype.Phenotype(self.genes)
+
     def __str__(self) -> str:
+        import Race
         ret = f"Phenotype:\n{self.getPhenotype()}\
             \nGenes:\n{self.genes}\
-            \n{self.phenotype.abilities}"
+            \n{self.phenotype.abilities}\
+            \n{self.phenotype.race.getRaceAbilities()}"
         return ret
 def makeMountainDwarf(individual):
     individual.flipBit(148)
