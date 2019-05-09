@@ -1,6 +1,7 @@
 from array import array
 import Phenotype
 
+
 GENOME_LENGTH = (5*Phenotype.POINTS)+(len(Phenotype.RACE_MAP)-1)+(len(Phenotype.CLASS_MAP)-1)
 
 class Individual:

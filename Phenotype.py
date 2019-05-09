@@ -1,4 +1,6 @@
 from array import array
+import Abilities
+import Skills
 
 POINTS = 27
 
@@ -29,85 +31,167 @@ CLASS_MAP = {
     32:"Abjuration Wizard",33:"Conjuration Wizard",34:"Divination Wizard",35:"Enchantment Wizard",36:"Evocation Wizard",37:"Illusion Wizard",38:"Necromancy Wizard",39:"Transmutation Wizard"
 }
 
+
+
 class Phenotype:
-    genes = None
+
+    proficiency = 6
 
     #Ability Scores
-    strengthScore = None
-    dexterityScore = None
-    constitutionScore = None
-    intelligenceScore = None
-    wisdomScore = None
-    charismaScore = None
+    abilityScores = {
+        Abilities.STRENGTH:0,
+        Abilities.DEXTERITY:0,
+        Abilities.CONSTITUTION:0,
+        Abilities.INTELLIGENCE:0,
+        Abilities.WISDOM:0,
+        Abilities.CHARISMA:0
+    }
 
     #Ability Score Modifiers
-    strengthModifier = None
-    dexterityModifier = None
-    constitutionModifier = None
-    intelligenceModifier = None
-    wisdomModifier = None
-    charismaModifier = None
+    abilityScoreModifiers = {
+        Abilities.STRENGTH:0,
+        Abilities.DEXTERITY:0,
+        Abilities.CONSTITUTION:0,
+        Abilities.INTELLIGENCE:0,
+        Abilities.WISDOM:0,
+        Abilities.CHARISMA:0
+    }
+    savingThrows = {
+        Abilities.STRENGTH:0,
+        Abilities.DEXTERITY:0,
+        Abilities.CONSTITUTION:0,
+        Abilities.INTELLIGENCE:0,
+        Abilities.WISDOM:0,
+        Abilities.CHARISMA:0
+    }
+    #Skill Modifiers
+    skillModifiers = {
+        Skills.ACROBATICS:0,
+        Skills.ANIMAL_HANDLING:0,
+        Skills.ATHLETICS:0,
+        Skills.ARCANA:0,
+        Skills.DECEPTION:0,
+        Skills.HISTORY:0,
+        Skills.INITIATIVE:0,
+        Skills.INSIGHT:0,
+        Skills.INTIMIDATION:0,
+        Skills.INVESTIGATION:0,
+        Skills.MEDICINE:0,
+        Skills.NATURE:0,
+        Skills.PERCEPTION:0,
+        Skills.PERFORMANCE:0,
+        Skills.PERSUASION:0,
+        Skills.RELIGION:0,
+        Skills.SLEIGHT_OF_HAND:0,
+        Skills.STEALTH:0,
+        Skills.SURVIVAL:0
+    }
 
-    #Race
-    race = None
+    #Derives Stats
+    armorClass = 0
+    hitPoints = 0
 
-    #Class
-    characterClass = None
+    #Proficiencies
+    armorProficiencies = set()
+    weaponProficiencies = set()
+    toolProficiencies = set()
+    savingThrowProficiencies = set()
+    skillProficiencies = set()
+
+    abilities = set()
 
     def __init__(self, genes: array):
-        self.genes = genes
-        self.setAbilityScores(genes)
+        #Get Point Chromosomes
+        pointChromosomes = []
+        for point in range(1,POINTS+1):
+            stop = point * 5
+            start = stop - 5
+            pointChromosomes.append(self.getChromosome(genes,start,stop))
+        #print(len(pointChromosomes))
+        
+        #Get Race Chromosome
         raceStart = 5*POINTS
         raceEnd = raceStart+len(RACE_MAP)-1
-        self.setRace(genes, raceStart,raceEnd)
-        self.setAbilityScoreModifiers()
+        raceChromosome = self.getChromosome(genes,raceStart,raceEnd)
+        #Get Class Chromosome
         classStart = raceEnd
         classEnd = classStart+len(CLASS_MAP)-1
-        self.setClass(genes,classStart,classEnd)
-    
-    def getPointChromosome(self,point: int, genes: array) -> array:
-        stop = point * 5
-        start = stop - 5
-        return genes[start:stop]
-        
-    def setAbilityScores(self, genes: array):
-        pointMap = {0:0, 1:0, 2:0,3:0,4:0,5:0}
-        for point in range(1,POINTS+1):
-            chromosome = self.getPointChromosome(point,genes)
-            assignment = self.getAssignment(chromosome)
-            pointMap[assignment]+=1
-        self.strengthScore = self.renderScore(pointMap[0])
-        self.dexterityScore = self.renderScore(pointMap[1])
-        self.constitutionScore = self.renderScore(pointMap[2])
-        self.intelligenceScore = self.renderScore(pointMap[3])
-        self.wisdomScore = self.renderScore(pointMap[4])
-        self.charismaScore = self.renderScore(pointMap[5])
+        classChromosome = self.getChromosome(genes,classStart,classEnd)
 
+        #Derive Stats from Point Chromosomes
+        pointMap = {0:0, 1:0, 2:0,3:0,4:0,5:0}
+        for chromosome in pointChromosomes:
+            pointMap[sumArray(chromosome)]+=1
+        self.renderScoresFromPoints(pointMap)
+        self.renderDerivedStats()
+        #Adjust Stats by Race
+        #Adjust Stats by Class
+
+    def __str__(self) -> str:
+        ret = f"Scores:\t{self.abilityScores}\
+            \nModifiers:\t{self.abilityScoreModifiers}\
+            \nSaving Throws:\t{self.savingThrows}\
+            \nSkills:\t{self.skillModifiers}"
+        return ret
+
+    def getChromosome(self, genes: array, start: int, stop: int)->array:
+        return genes[start:stop]
+
+    def renderScoresFromPoints(self, pointMap:dict):
+        scores = self.abilityScores
+        renderScore = self.renderScore
+        scores[Abilities.STRENGTH] = renderScore(pointMap[0])
+        scores[Abilities.DEXTERITY] = renderScore(pointMap[1])
+        scores[Abilities.CONSTITUTION] = renderScore(pointMap[2])
+        scores[Abilities.INTELLIGENCE] = renderScore(pointMap[3])
+        scores[Abilities.WISDOM] = renderScore(pointMap[4])
+        scores[Abilities.CHARISMA] = renderScore(pointMap[5])
+
+    def renderScore(self, points: int)-> int:
+        score = 8
+        if(points <= 5):
+            score+points
+        elif(points == 6):
+            score+=5
+        elif(points <= 8):
+            score+=6
+        elif(points <= 11):
+            score+=7
+        elif(points <=14):
+            score+=8
+        elif(points <=18):
+            score+=9
+        elif(points > 18):
+            score+=10
+        return score
+
+    def renderDerivedStats(self):
+        #Modifiers
+        for score in self.abilityScores.keys():
+            self.abilityScoreModifiers[score] = getModifier(self.abilityScores[score])
+        #Saving Throws
+        for modifier in self.abilityScoreModifiers.keys():
+            self.savingThrows[modifier] = self.abilityScoreModifiers[modifier]
+        #Skills
+        for skill in Skills.STR_SKILLS:
+            self.skillModifiers[skill] = self.abilityScoreModifiers[Abilities.STRENGTH]
+        for skill in Skills.DEX_SKILLS:
+            self.skillModifiers[skill] = self.abilityScoreModifiers[Abilities.DEXTERITY]
+        for skill in Skills.INT_SKILLS:
+            self.skillModifiers[skill] = self.abilityScoreModifiers[Abilities.INTELLIGENCE]
+        for skill in Skills.WIS_SKILLS:
+            self.skillModifiers[skill] = self.abilityScoreModifiers[Abilities.WISDOM]
+        for skill in Skills.CHA_SKILLS:
+            self.skillModifiers[skill] = self.abilityScoreModifiers[Abilities.CHARISMA]
+
+    """
     def getAssignment(self,chromosome: array) -> int:
         total = 0
         for bit in chromosome:
             if(bit > 0):
                 total+=1
         return total
-    def renderScore(self, points: int)-> int:
-        if(points == 0):
-            return 8
-        if(points <= 5):
-            return 8+points
-        if(points == 6):
-            return 13
-        if(points <= 8):
-            return 14
-        if(points <= 11):
-            return 15
-        if(points <=14):
-            return 16
-        if(points <=18):
-            return 17
-        if(points > 18):
-            return 18
-        else:
-            return 8
+    
     def setRace(self,genes: array, start: int,end:int):
         chromosome = self.genes[start:end]
         self.race = RACE_MAP[self.getAssignment(chromosome)]
@@ -135,13 +219,24 @@ class Phenotype:
             \nConstitution Score:\t{self.constitutionScore}\t{self.constitutionModifier}\
             \nIntelligence Score:\t{self.intelligenceScore}\t{self.intelligenceModifier}\
             \nWisdom Score:\t{self.wisdomScore}\t{self.wisdomModifier}\
-            \nCharisma Score:\t{self.charismaScore}\t{self.charismaModifier}"
+            \nCharisma Score:\t{self.charismaScore}\t{self.charismaModifier}\
+            \nHit Points:\t{self.hitPoints}\
+            \nArmor Class:\t{self.armorClass}\
+            \nSaving Throws:\t{self.savingThrows}\
+            \nSkills:\t{self.Skills}"
         return ret
+    """
+def sumArray(a:array)->int:
+    total = 0
+    for i in a:
+        total+=i
+    return total
+
+def getModifier(score:int)->int:
+    return (score-10)//2
 
 def main(): 
     print(Phenotype(array('b',[0]*188)))
-    print()
-    print(Phenotype(array('b',[1]*188)))
 
 
 if __name__ == "__main__":
