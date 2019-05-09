@@ -116,6 +116,12 @@ class Phenotype:
         self.renderScoresFromPoints(pointMap)
         #Adjust Stats by Race
         self.race = Race.RACE_MAP[sumArray(raceChromosome)]
+        race = self.race
+        for score in self.abilityScores.keys():
+            self.abilityScores[score] += race.scoreIncreases[score]
+        self.speed = race.speed
+        for weapon in race.weaponProficiencies:
+            self.weaponProficiencies.add(weapon)
 
         #Adjust Stats by Background
         self.background = Background.BACKGROUND_MAP[sumArray(backgroundChromosome)]
@@ -132,7 +138,7 @@ class Phenotype:
             \nClass:\t{self.characterClass}\
             \nHit Points:\t{self.hitPoints}\
             \nArmor Class:\t{self.armorClass}\
-            \nMovement:\t{self.speed}\
+            \nSpeed:\t{self.speed}\
             \nPassive Perception:\t{self.passivePerception}\
             \nScores:\t{self.abilityScores}\
             \nModifiers:\t{self.abilityScoreModifiers}\

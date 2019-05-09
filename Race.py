@@ -1,5 +1,5 @@
 import Abilities
-
+import Weapons
 class Race:
 
     scoreIncreases = {
@@ -13,15 +13,25 @@ class Race:
     speed = 0
     raceAbilities = set()
     weaponProficiencies = set()
-    toolProficiencies = set()
     def __init__(self):
         pass
-    
     def __str__(self) -> str:
         return "None"
+class Dwarf(Race):
     
+    def __init__(self):
+        super(Dwarf,self).__init__()
+        self.scoreIncreases[Abilities.CONSTITUTION]+=2
+        self.speed = 25
+        self.weaponProficiencies = Weapons.DWARVEN_COMBAT_TRAINING
+class HillDwarf(Dwarf):
+    def __init__(self):
+        super(HillDwarf,self).__init__()
+        self.scoreIncreases[Abilities.WISDOM]+=1
+    def __str__(self)->str:
+        return "Hill Dwarf"
 RACE_MAP = {
-    0:"Hill Dwarf",1:"Mountain Dwarf",
+    0:HillDwarf(),1:"Mountain Dwarf",
     2:"High Elf", 3: "Wood Elf", 4: "Dark Elf",
     5:"Lightfoot Halfling", 6:"Stout Halfling",
     7: "Human",
