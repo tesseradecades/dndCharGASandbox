@@ -1,9 +1,5 @@
 from array import array
-from Background import BACKGROUND_MAP
 import Phenotype
-
-
-GENOME_LENGTH = (5*Phenotype.POINTS)+(len(BACKGROUND_MAP)-1)+(len(Phenotype.RACE_MAP)-1)+(len(Phenotype.CLASS_MAP)-1)
 
 class Individual:
     fitness = None
@@ -51,8 +47,8 @@ class Individual:
 
 
 def main():
-    individual = Individual(array('b',[0]*GENOME_LENGTH))
-    print(GENOME_LENGTH)
+    individual = Individual(array('b',[0]*Phenotype.GENOME_LENGTH))
+    print(Phenotype.GENOME_LENGTH)
     print(individual)
     print()
     individual.flipBit(1)

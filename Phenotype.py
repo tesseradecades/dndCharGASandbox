@@ -12,35 +12,7 @@ CONSTITUTION = Abilities.CONSTITUTION
 INTELLIGENCE = Abilities.INTELLIGENCE
 WISDOM = Abilities.WISDOM
 CHARISMA = Abilities.CHARISMA
-
-RACE_MAP = {
-    0:"Hill Dwarf",1:"Mountain Dwarf",
-    2:"High Elf", 3: "Wood Elf", 4: "Dark Elf",
-    5:"Lightfoot Halfling", 6:"Stout Halfling",
-    7: "Human",
-    8:"Dragonborn",
-    9:"Forest Gnome", 10: "Rock Gnome",
-    11:"Half-Elf",
-    12:"Half-Orc",
-    13:"Tiefling"
-    }
-
-CLASS_MAP = {
-    0:"Berserker Barbarian", 1: "Totem Barbarian",
-    2:"Lore Bard", 3:"Valor Bard",
-    4:"Knowledge Cleric", 5:"Life Cleric", 6:"Light Cleric", 7:"Nature Cleric",8:"Tempest Cleric",9:"Trickery Cleric",10:"War Cleric",
-    11:"Land Druid", 12:"Moon Druid",
-    13:"Champion Fighter", 14:"Battlemaster Fighter",15:"Eldritch Knight Fighter",
-    16:"Open Hand Monk",17:"Shadow Monk",18:"Four Elements Monk",
-    19:"Devotion Paladin",20:"Ancients Paladin",21:"Vengeance Paladin",
-    22:"Hunter Ranger",23:"Beast Master Ranger",
-    24:"Thief Rogue",25:"Assassin Rogue",26:"Arcane Trickster Rogue",
-    27:"Draconic Sorcerer",28:"Wild Magic Sorcerer",
-    29:"Fiend Warlock",30:"Archfey Warlock", 31:"Great Old One Warlock",
-    32:"Abjuration Wizard",33:"Conjuration Wizard",34:"Divination Wizard",35:"Enchantment Wizard",36:"Evocation Wizard",37:"Illusion Wizard",38:"Necromancy Wizard",39:"Transmutation Wizard"
-}
-
-
+GENOME_LENGTH = (5*POINTS)+(len(Background.BACKGROUND_MAP)-1)+(len(Race.RACE_MAP)-1)+(len(CharacterClass.CLASS_MAP)-1)
 
 class Phenotype:
 
@@ -130,11 +102,11 @@ class Phenotype:
 
         #Get Race Chromosome
         raceStart = backgroundStop
-        raceEnd = raceStart+len(RACE_MAP)-1
+        raceEnd = raceStart+len(Race.RACE_MAP)-1
         raceChromosome = self.getChromosome(genes,raceStart,raceEnd)
         #Get Class Chromosome
         classStart = raceEnd
-        classEnd = classStart+len(CLASS_MAP)-1
+        classEnd = classStart+len(CharacterClass.CLASS_MAP)-1
         classChromosome = self.getChromosome(genes,classStart,classEnd)
 
         #Derive Stats from Point Chromosomes
@@ -143,7 +115,7 @@ class Phenotype:
             pointMap[sumArray(chromosome)]+=1
         self.renderScoresFromPoints(pointMap)
         #Adjust Stats by Race
-        self.race = Race.Race()#RACE_MAP[sumArray(raceChromosome)]
+        self.race = Race.RACE_MAP[sumArray(raceChromosome)]
 
         #Adjust Stats by Background
         self.background = Background.BACKGROUND_MAP[sumArray(backgroundChromosome)]
@@ -151,7 +123,7 @@ class Phenotype:
             self.skillProficiencies.add(skill)
 
         #Adjust Stats by Class
-        self.characterClass = CharacterClass.CharacterClass()#CLASS_MAP[sumArray(classChromosome)]
+        self.characterClass = CharacterClass.CLASS_MAP[sumArray(classChromosome)]
         self.renderDerivedStats()
 
     def __str__(self) -> str:
@@ -254,8 +226,6 @@ def getModifier(score:int)->int:
     return (score-10)//2
 
 def main(): 
-    GENOME_LENGTH = (5*POINTS)+(len(Background.BACKGROUND_MAP)-1)+(len(RACE_MAP)-1)+(len(CLASS_MAP)-1)
-
     print(Phenotype(array('b',[0]*GENOME_LENGTH)))
 
 
