@@ -56,11 +56,20 @@ def makeWoodElf(individual):
 def makeDarkElf(individual):
     makeWoodElf(individual)
     individual.flipBit(151)
+def makeLightfoot(individual):
+    makeDarkElf(individual)
+    individual.flipBit(152)
+def makeStout(individual):
+    makeLightfoot(individual)
+    individual.flipBit(153)
+def makeHuman(individual):
+    makeStout(individual)
+    individual.flipBit(154)
 
 def main():
     individual = Individual(array('b',[0]*Phenotype.GENOME_LENGTH))
     print(Phenotype.GENOME_LENGTH)
-    makeDarkElf(individual)
+    makeHuman(individual)
     print(individual)
     
 

@@ -12,7 +12,7 @@ class Race:
     def getScoreIncreases(self)->dict:
         return dict()
     def getSpeed(self)->int:
-        return 0
+        return 30
     def getRaceAbilities(self)->set:
         return set()
     def getWeaponProficiencies(self)->set:
@@ -64,8 +64,6 @@ class MountainDwarf(Dwarf):
 class Elf(Race):
     def getScoreIncreases(self)-> dict:
         return {Abilities.DEXTERITY:2}
-    def getSpeed(self)->int:
-        return 30
     def getRaceAbilities(self)->set:
         return {"Darkvision","Fey Ancestry","Trance"}
     def getSkillProficiencies(self)->set:
@@ -112,11 +110,53 @@ class DarkElf(Elf):
         return Weapons.DROW_WEAPON_TRAINING
     def __str__(self) -> str:
         return "Dark Elf"
+class Halfling(Race):
+    def getScoreIncreases(self)->dict:
+        return {Abilities.DEXTERITY:2}
+    def getSpeed(self)->int:
+        return 25
+    def getRaceAbilities(self)->set:
+        return {"Lucky","Halfling Nimbleness", "Brave"}
+        
+class LightfootHalfling(Halfling):
+    def getScoreIncreases(self)->dict:
+        scoreIncreases = super(LightfootHalfling,self).getScoreIncreases()
+        scoreIncreases[Abilities.CHARISMA]=1
+        return scoreIncreases
+    def getRaceAbilities(self)->set:
+        raceAbilities = super(LightfootHalfling,self).getRaceAbilities()
+        raceAbilities.update("NaturallyStealthy")
+        return raceAbilities
+    def __str__(self) -> str:
+        return "Lightfoot Halfling"
+class StoutHalfling(Halfling):
+    def getScoreIncreases(self)->dict:
+        scoreIncreases = super(StoutHalfling,self).getScoreIncreases()
+        scoreIncreases[Abilities.CONSTITUTION]=1
+        return scoreIncreases
+    def getRaceAbilities(self)->set:
+        raceAbilities = super(StoutHalfling,self).getRaceAbilities()
+        raceAbilities.update("Stout Resilience")
+        return raceAbilities
+    def __str__(self) -> str:
+        return "Stout Halfling"
+class Human(Race):
+    def getScoreIncreases(self)->dict:
+        return {
+            Abilities.CONSTITUTION:1,
+            Abilities.STRENGTH:1,
+            Abilities.DEXTERITY:1,
+            Abilities.INTELLIGENCE:1,
+            Abilities.WISDOM:1,
+            Abilities.CHARISMA:1
+            }
+    def __str__(self) -> str:
+        return "Human"
 RACE_MAP = {
     0:HillDwarf(),1:MountainDwarf(),
     2:HighElf(), 3:WoodElf(), 4:DarkElf(),
-    5:"Lightfoot Halfling", 6:"Stout Halfling",
-    7: "Human",
+    5:LightfootHalfling(), 6:StoutHalfling(),
+    7: Human(),
     8:"Dragonborn",
     9:"Forest Gnome", 10: "Rock Gnome",
     11:"Half-Elf",
