@@ -25,22 +25,6 @@ RACE_MAP = {
     13:"Tiefling"
     }
 
-BACKGROUND_MAP = {
-    0:"Acolyte",
-    1:"Charlatan",
-    2:"Criminal",
-    3:"Entertainer",
-    4:"Folk Hero",
-    5:"Guild Artisan",
-    6:"Hermit",
-    7:"Noble",
-    8:"Outlander",
-    9:"Sage",
-    10:"Sailor",
-    11:"Soldier",
-    12:"Urchin"
-}
-
 CLASS_MAP = {
     0:"Berserker Barbarian", 1: "Totem Barbarian",
     2:"Lore Bard", 3:"Valor Bard",
@@ -141,7 +125,7 @@ class Phenotype:
         
         #Get Background Chromosome
         backgroundStart = 5*POINTS
-        backgroundStop = backgroundStart+len(BACKGROUND_MAP)-1
+        backgroundStop = backgroundStart+len(Background.BACKGROUND_MAP)-1
         backgroundChromosome = self.getChromosome(genes,backgroundStart,backgroundStop)
 
         #Get Race Chromosome
@@ -162,7 +146,7 @@ class Phenotype:
         self.race = Race.Race()#RACE_MAP[sumArray(raceChromosome)]
 
         #Adjust Stats by Background
-        self.background = Background.Background()#BACKGROUND_MAP[sumArray(backgroundChromosome)]
+        self.background = Background.BACKGROUND_MAP[sumArray(backgroundChromosome)]
         for skill in self.background.skillProficiencies:
             self.skillProficiencies.add(skill)
 
@@ -172,7 +156,7 @@ class Phenotype:
 
     def __str__(self) -> str:
         ret = f"Race:\t{self.race}\
-            \nBackground:\t{self.background}\
+            \nBackground:\t{self.background.__str__(self.background)}\
             \nClass:\t{self.characterClass}\
             \nHit Points:\t{self.hitPoints}\
             \nArmor Class:\t{self.armorClass}\
@@ -270,7 +254,7 @@ def getModifier(score:int)->int:
     return (score-10)//2
 
 def main(): 
-    GENOME_LENGTH = (5*POINTS)+(len(BACKGROUND_MAP)-1)+(len(RACE_MAP)-1)+(len(CLASS_MAP)-1)
+    GENOME_LENGTH = (5*POINTS)+(len(Background.BACKGROUND_MAP)-1)+(len(RACE_MAP)-1)+(len(CLASS_MAP)-1)
 
     print(Phenotype(array('b',[0]*GENOME_LENGTH)))
 
