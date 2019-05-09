@@ -187,6 +187,7 @@ class Phenotype:
         self.armorProficiencies.update(race.getArmorProficiencies())
         self.weaponProficiencies.update(race.getWeaponProficiencies())
         self.abilities.update(race.getRaceAbilities())
+        self.skillProficiencies.update(race.getSkillProficiencies())
 
     def adjustByClass(self, characterClass: CharacterClass):
         pass
@@ -232,7 +233,7 @@ class Phenotype:
         
         self.armorClass = 10+dexMod
         self.hitPoints = 4+self.abilityScoreModifiers[CONSTITUTION]
-        self.passivePerception = 10+wisMod
+        self.passivePerception = 10+self.skillModifiers[Skills.PERCEPTION]
 
 def sumArray(a:array)->int:
     total = 0

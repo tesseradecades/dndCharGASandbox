@@ -44,16 +44,16 @@ class Individual:
             \nGenes:\n{self.genes}"
         return ret
     
-
+def makeHighElf(individual):
+    individual.flipBit(148)
+    individual.flipBit(149)
 
 def main():
     individual = Individual(array('b',[0]*Phenotype.GENOME_LENGTH))
     print(Phenotype.GENOME_LENGTH)
+    makeHighElf(individual)
     print(individual)
-    print()
-    individual.flipBit(140)
-    individual.flipBit(141)
-    print(individual)
+    
 
 if __name__ == "__main__":
     main()

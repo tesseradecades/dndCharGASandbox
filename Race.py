@@ -1,5 +1,6 @@
 import Abilities
 import Armors
+import Skills
 import Weapons
 class Race:
     """def __init__(self):
@@ -17,6 +18,8 @@ class Race:
     def getWeaponProficiencies(self)->set:
         return set()
     def getArmorProficiencies(self)->set:
+        return set()
+    def getSkillProficiencies(self)->set:
         return set()
 class Dwarf(Race):
 
@@ -58,9 +61,32 @@ class MountainDwarf(Dwarf):
     def __str__(self)->str:
         return "Mountain Dwarf"
 
+class Elf(Race):
+    def getScoreIncreases(self)-> dict:
+        return {Abilities.DEXTERITY:2}
+    def getSpeed(self)->int:
+        return 30
+    def getRaceAbilities(self)->set:
+        return {"Darkvision","Fey Ancestry","Trance"}
+    def getSkillProficiencies(self)->set:
+        return {Skills.PERCEPTION}
+class HighElf(Elf):
+    def getScoreIncreases(self)->dict:
+        scoreIncreases = super(HighElf,self).getScoreIncreases()
+        scoreIncreases[Abilities.INTELLIGENCE]=1
+        return scoreIncreases
+    def getWeaponProficiencies(self)->set:
+        return Weapons.ELF_WEAPON_TRAINING
+    def getRaceAbilities(self)->set:
+        raceAbilities = super(HighElf,self).getRaceAbilities()
+        raceAbilities.update("Cantrip")
+        return raceAbilities
+
+    def __str__(self) -> str:
+        return "High Elf"
 RACE_MAP = {
     0:HillDwarf(),1:MountainDwarf(),
-    2:"High Elf", 3: "Wood Elf", 4: "Dark Elf",
+    2:HighElf(), 3: "Wood Elf", 4: "Dark Elf",
     5:"Lightfoot Halfling", 6:"Stout Halfling",
     7: "Human",
     8:"Dragonborn",
