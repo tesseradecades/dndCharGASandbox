@@ -41,7 +41,8 @@ class Individual:
         self.phenotype = Phenotype.Phenotype(self.genes)
     def __str__(self) -> str:
         ret = f"Phenotype:\n{self.getPhenotype()}\
-            \nGenes:\n{self.genes}"
+            \nGenes:\n{self.genes}\
+            \n{self.phenotype.abilities}"
         return ret
 def makeMountainDwarf(individual):
     individual.flipBit(148)
@@ -65,11 +66,20 @@ def makeStout(individual):
 def makeHuman(individual):
     makeStout(individual)
     individual.flipBit(154)
+def makeDragonborn(individual):
+    makeHuman(individual)
+    individual.flipBit(155)
+def makeForestGnome(individual):
+    makeDragonborn(individual)
+    individual.flipBit(156)
+def makeRockGnome(individual):
+    makeForestGnome(individual)
+    individual.flipBit(157)
 
 def main():
     individual = Individual(array('b',[0]*Phenotype.GENOME_LENGTH))
     print(Phenotype.GENOME_LENGTH)
-    makeHuman(individual)
+    makeRockGnome(individual)
     print(individual)
     
 
