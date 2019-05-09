@@ -190,7 +190,20 @@ class HalfElf(Race):
         return "Half-Elf"
 class HalfOrc(Race):
     def getScoreIncreases(self)->dict:
-        return {}
+        return {Abilities.STRENGTH:2, Abilities.CONSTITUTION:1}
+    def getRaceAbilities(self)->set:
+        return {"Darkvision","Relentless Endurance","Savage Attacks"}
+    def getSkillProficiencies(self)->set:
+        return {Skills.INTIMIDATION}
+    def __str__(self)->str:
+        return "Half-Orc"
+class Tiefling(Race):
+    def getScoreIncreases(self)->dict:
+        return {Abilities.INTELLIGENCE:1,Abilities.CHARISMA:2}
+    def getRaceAbilities(self)->set:
+        return {"Darkvision","Hellish Resistance","Infernal Legacy"}
+    def __str__(self)->str:
+        return "Tiefling"
 RACE_MAP = {
     0:HillDwarf,1:MountainDwarf,
     2:HighElf, 3:WoodElf, 4:DarkElf,
@@ -199,6 +212,6 @@ RACE_MAP = {
     8:Dragonborn,
     9:ForestGnome, 10:RockGnome,
     11:HalfElf,
-    12:"Half-Orc",
-    13:"Tiefling"
+    12:HalfOrc,
+    13:Tiefling
     }
