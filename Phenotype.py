@@ -1,5 +1,7 @@
 from array import array
 import Abilities
+import CharacterClass
+import Race
 import Skills
 
 POINTS = 27
@@ -36,6 +38,9 @@ CLASS_MAP = {
 class Phenotype:
 
     proficiency = 6
+
+    race = None
+    characterClass = None
 
     #Ability Scores
     abilityScores = {
@@ -90,6 +95,7 @@ class Phenotype:
     #Derives Stats
     armorClass = 0
     hitPoints = 0
+    movement = 0
 
     #Proficiencies
     armorProficiencies = set()
@@ -107,7 +113,6 @@ class Phenotype:
             stop = point * 5
             start = stop - 5
             pointChromosomes.append(self.getChromosome(genes,start,stop))
-        #print(len(pointChromosomes))
         
         #Get Race Chromosome
         raceStart = 5*POINTS
@@ -123,12 +128,19 @@ class Phenotype:
         for chromosome in pointChromosomes:
             pointMap[sumArray(chromosome)]+=1
         self.renderScoresFromPoints(pointMap)
-        self.renderDerivedStats()
         #Adjust Stats by Race
+        self.race = Race.Race()#RACE_MAP[sumArray(raceChromosome)]
         #Adjust Stats by Class
+        self.characterClass = CharacterClass.CharacterClass()#CLASS_MAP[sumArray(classChromosome)]
+        self.renderDerivedStats()
 
     def __str__(self) -> str:
-        ret = f"Scores:\t{self.abilityScores}\
+        ret = f"Race:\t{self.race}\
+            \nClass:\t{self.characterClass}\
+            \nHit Points:\t{self.hitPoints}\
+            \nArmor Class:\t{self.armorClass}\
+            \nMovement:\t{self.movement}\
+            \nScores:\t{self.abilityScores}\
             \nModifiers:\t{self.abilityScoreModifiers}\
             \nSaving Throws:\t{self.savingThrows}\
             \nSkills:\t{self.skillModifiers}"
@@ -171,61 +183,39 @@ class Phenotype:
             self.abilityScoreModifiers[score] = getModifier(self.abilityScores[score])
         #Saving Throws
         for modifier in self.abilityScoreModifiers.keys():
-            self.savingThrows[modifier] = self.abilityScoreModifiers[modifier]
+            mod = self.abilityScoreModifiers[modifier]
+            if(modifier in self.savingThrowProficiencies):
+                mod+=self.proficiency
+            self.savingThrows[modifier] = mod
         #Skills
         for skill in Skills.STR_SKILLS:
-            self.skillModifiers[skill] = self.abilityScoreModifiers[Abilities.STRENGTH]
+            mod = self.abilityScoreModifiers[Abilities.STRENGTH]
+            if(skill in self.skillProficiencies):
+                mod+=self.proficiency
+            self.skillModifiers[skill] = mod
         for skill in Skills.DEX_SKILLS:
-            self.skillModifiers[skill] = self.abilityScoreModifiers[Abilities.DEXTERITY]
+            mod = self.abilityScoreModifiers[Abilities.DEXTERITY]
+            if(skill in self.skillProficiencies):
+                mod+=self.proficiency
+            self.skillModifiers[skill] = mod
         for skill in Skills.INT_SKILLS:
-            self.skillModifiers[skill] = self.abilityScoreModifiers[Abilities.INTELLIGENCE]
+            mod = self.abilityScoreModifiers[Abilities.INTELLIGENCE]
+            if(skill in self.skillProficiencies):
+                mod+=self.proficiency
+            self.skillModifiers[skill] = mod
         for skill in Skills.WIS_SKILLS:
-            self.skillModifiers[skill] = self.abilityScoreModifiers[Abilities.WISDOM]
+            mod = self.abilityScoreModifiers[Abilities.WISDOM]
+            if(skill in self.skillProficiencies):
+                mod+=self.proficiency
+            self.skillModifiers[skill] = mod
         for skill in Skills.CHA_SKILLS:
-            self.skillModifiers[skill] = self.abilityScoreModifiers[Abilities.CHARISMA]
+            mod = self.abilityScoreModifiers[Abilities.CHARISMA]
+            if(skill in self.skillProficiencies):
+                mod+=self.proficiency
+            self.skillModifiers[skill] = mod
+        self.armorClass = 10+self.abilityScoreModifiers[Abilities.DEXTERITY]
+        self.hitPoints = 4+self.abilityScoreModifiers[Abilities.CONSTITUTION]
 
-    """
-    def getAssignment(self,chromosome: array) -> int:
-        total = 0
-        for bit in chromosome:
-            if(bit > 0):
-                total+=1
-        return total
-    
-    def setRace(self,genes: array, start: int,end:int):
-        chromosome = self.genes[start:end]
-        self.race = RACE_MAP[self.getAssignment(chromosome)]
-
-    def setClass(self,genes:array,start:int,end:int):
-        chromosome = self.genes[start:end]
-        self.characterClass = CLASS_MAP[self.getAssignment(chromosome)]
-
-    def setAbilityScoreModifiers(self):
-        self.strengthModifier = self.getModifier(self.strengthScore)
-        self.dexterityModifier = self.getModifier(self.dexterityScore)
-        self.constitutionModifier = self.getModifier(self.constitutionScore)
-        self.intelligenceModifier = self.getModifier(self.intelligenceScore)
-        self.wisdomModifier = self.getModifier(self.wisdomScore)
-        self.charismaModifier = self.getModifier(self.charismaScore)
-    
-    def getModifier(self, score: int)->int:
-        return (score - 10)//2
-    
-    def __str__(self) -> str:
-        ret = f"Race:\t{self.race}\
-            \nClass:\t{self.characterClass}\
-            \nStrength Score:\t{self.strengthScore}\t{self.strengthModifier}\
-            \nDexterity Score:\t{self.dexterityScore}\t{self.dexterityModifier}\
-            \nConstitution Score:\t{self.constitutionScore}\t{self.constitutionModifier}\
-            \nIntelligence Score:\t{self.intelligenceScore}\t{self.intelligenceModifier}\
-            \nWisdom Score:\t{self.wisdomScore}\t{self.wisdomModifier}\
-            \nCharisma Score:\t{self.charismaScore}\t{self.charismaModifier}\
-            \nHit Points:\t{self.hitPoints}\
-            \nArmor Class:\t{self.armorClass}\
-            \nSaving Throws:\t{self.savingThrows}\
-            \nSkills:\t{self.Skills}"
-        return ret
-    """
 def sumArray(a:array)->int:
     total = 0
     for i in a:
