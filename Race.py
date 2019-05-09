@@ -84,9 +84,24 @@ class HighElf(Elf):
 
     def __str__(self) -> str:
         return "High Elf"
+class WoodElf(Elf):
+    def getScoreIncreases(self)->dict:
+        scoreIncreases = super(WoodElf,self).getScoreIncreases()
+        scoreIncreases[Abilities.WISDOM]=1
+        return scoreIncreases
+    def getWeaponProficiencies(self)->set:
+        return Weapons.ELF_WEAPON_TRAINING
+    def getSpeed(self)->int:
+        return 35
+    def getRaceAbilities(self)->set:
+        raceAbilities = super(WoodElf,self).getRaceAbilities()
+        raceAbilities.update("Mask of the Wild")
+        return raceAbilities
+    def __str__(self) -> str:
+        return "Wood Elf"
 RACE_MAP = {
     0:HillDwarf(),1:MountainDwarf(),
-    2:HighElf(), 3: "Wood Elf", 4: "Dark Elf",
+    2:HighElf(), 3:WoodElf(), 4: "Dark Elf",
     5:"Lightfoot Halfling", 6:"Stout Halfling",
     7: "Human",
     8:"Dragonborn",

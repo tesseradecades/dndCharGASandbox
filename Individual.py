@@ -43,15 +43,24 @@ class Individual:
         ret = f"Phenotype:\n{self.getPhenotype()}\
             \nGenes:\n{self.genes}"
         return ret
-    
-def makeHighElf(individual):
+def makeMountainDwarf(individual):
     individual.flipBit(148)
+
+def makeHighElf(individual):
+    makeMountainDwarf(individual)
     individual.flipBit(149)
+
+def makeWoodElf(individual):
+    makeHighElf(individual)
+    individual.flipBit(150)
+def makeDarkElf(individual):
+    makeWoodElf(individual)
+    individual.flipBit(151)
 
 def main():
     individual = Individual(array('b',[0]*Phenotype.GENOME_LENGTH))
     print(Phenotype.GENOME_LENGTH)
-    makeHighElf(individual)
+    makeWoodElf(individual)
     print(individual)
     
 
