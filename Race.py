@@ -3,12 +3,8 @@ import Armors
 import Skills
 import Weapons
 class Race:
-    """def __init__(self):
-        pass
-    """
     def __str__(self) -> str:
         return "None"
-    
     def getScoreIncreases(self)->dict:
         return dict()
     def getSpeed(self)->int:
@@ -31,7 +27,6 @@ class Dwarf(Race):
         return Weapons.DWARVEN_COMBAT_TRAINING
     def getRaceAbilities(self)->set:
         return {"Darkvision","Dwarven Resilience","Tool Proficiency","Stonecunning"}
-
 class HillDwarf(Dwarf):
 
     def getScoreIncreases(self)->dict:
@@ -40,8 +35,8 @@ class HillDwarf(Dwarf):
         return scoreIncreases
 
     def getRaceAbilities(self)->set:
-        raceAbilities = super(HillDwarf,self).getRaceAbilities()
-        raceAbilities.add("Dwarven Toughness")
+        raceAbilities = {"Dwarven Toughness"}
+        raceAbilities.update(super(HillDwarf,self).getRaceAbilities())
         return raceAbilities
 
     def __str__(self)->str:
@@ -54,13 +49,12 @@ class MountainDwarf(Dwarf):
         return scoreIncreases
 
     def getArmorProficiencies(self)->set:
-        armorProficiencies = super(MountainDwarf,self).getArmorProficiencies()
-        armorProficiencies.update(Armors.DWARVEN_ARMOR_TRAINING)
+        armorProficiencies = Armors.DWARVEN_ARMOR_TRAINING
+        armorProficiencies.update(super(MountainDwarf,self).getArmorProficiencies())
         return armorProficiencies
 
     def __str__(self)->str:
         return "Mountain Dwarf"
-
 class Elf(Race):
     def getScoreIncreases(self)-> dict:
         return {Abilities.DEXTERITY:2}
@@ -76,8 +70,8 @@ class HighElf(Elf):
     def getWeaponProficiencies(self)->set:
         return Weapons.ELF_WEAPON_TRAINING
     def getRaceAbilities(self)->set:
-        raceAbilities = super(HighElf,self).getRaceAbilities()
-        raceAbilities.update("Cantrip")
+        raceAbilities = {"Cantrip"}
+        raceAbilities.update(super(HighElf,self).getRaceAbilities())
         return raceAbilities
 
     def __str__(self) -> str:
@@ -92,8 +86,8 @@ class WoodElf(Elf):
     def getSpeed(self)->int:
         return 35
     def getRaceAbilities(self)->set:
-        raceAbilities = super(WoodElf,self).getRaceAbilities()
-        raceAbilities.update("Mask of the Wild")
+        raceAbilities = {"Mask of the Wild"}
+        raceAbilities.update(super(WoodElf,self).getRaceAbilities())
         return raceAbilities
     def __str__(self) -> str:
         return "Wood Elf"
@@ -103,8 +97,8 @@ class DarkElf(Elf):
         scoreIncreases[Abilities.CHARISMA]=1
         return scoreIncreases
     def getRaceAbilities(self)->set:
-        raceAbilities = super(DarkElf,self).getRaceAbilities()
-        raceAbilities.update("Superior Darkvision","Drow Magic")
+        raceAbilities = {"Superior Darkvision","Drow Magic"}
+        raceAbilities.update(super(DarkElf,self).getRaceAbilities())
         return raceAbilities
     def getWeaponProficiencies(self)->set:
         return Weapons.DROW_WEAPON_TRAINING
@@ -116,16 +110,15 @@ class Halfling(Race):
     def getSpeed(self)->int:
         return 25
     def getRaceAbilities(self)->set:
-        return {"Lucky","Halfling Nimbleness", "Brave"}
-        
+        return {"Lucky","Halfling Nimbleness", "Brave"}     
 class LightfootHalfling(Halfling):
     def getScoreIncreases(self)->dict:
         scoreIncreases = super(LightfootHalfling,self).getScoreIncreases()
         scoreIncreases[Abilities.CHARISMA]=1
         return scoreIncreases
     def getRaceAbilities(self)->set:
-        raceAbilities = super(LightfootHalfling,self).getRaceAbilities()
-        raceAbilities.update("NaturallyStealthy")
+        raceAbilities = {"NaturallyStealthy"}
+        raceAbilities.update(super(LightfootHalfling,self).getRaceAbilities())
         return raceAbilities
     def __str__(self) -> str:
         return "Lightfoot Halfling"
@@ -135,8 +128,8 @@ class StoutHalfling(Halfling):
         scoreIncreases[Abilities.CONSTITUTION]=1
         return scoreIncreases
     def getRaceAbilities(self)->set:
-        raceAbilities = super(StoutHalfling,self).getRaceAbilities()
-        raceAbilities.update("Stout Resilience")
+        raceAbilities = {"Stout Resilience"}
+        raceAbilities.update(super(StoutHalfling,self).getRaceAbilities())
         return raceAbilities
     def __str__(self) -> str:
         return "Stout Halfling"
@@ -152,14 +145,73 @@ class Human(Race):
             }
     def __str__(self) -> str:
         return "Human"
+class Dragonborn(Race):
+    def getScoreIncreases(self)->dict:
+        return {Abilities.STRENGTH:2, Abilities.CHARISMA:1}
+    def getRaceAbilities(self)->set:
+        return{"Draconic Ancestry","Breath Weapon","Damage Resistance"}
+    def __str__(self)->str:
+        return "Dragonborn"
+class Gnome(Race):
+    def getScoreIncreases(self)->dict:
+        return {Abilities.INTELLIGENCE:2}
+    def getSpeed(self)->int:
+        return 25
+    def getRaceAbilities(self)->set:
+        return {"Darkvision","Gnome Cunning"}
+class ForestGnome(Gnome):
+    def getScoreIncreases(self)->dict:
+        scoreIncreases = super(ForestGnome,self).getScoreIncreases()
+        scoreIncreases[Abilities.DEXTERITY]=1
+        return scoreIncreases
+    def getRaceAbilities(self)->set:
+        abilities = {"Natural Illusionist","Speak With Small Beasts"}
+        abilities.update(super(ForestGnome,self).getRaceAbilities())
+        return abilities
+    def __str__(self)->str:
+        return "Forest Gnome"
+class RockGnome(Gnome):
+    def getScoreIncreases(self)->dict:
+        scoreIncreases = super(RockGnome,self).getScoreIncreases()
+        scoreIncreases[Abilities.CONSTITUTION]=1
+        return scoreIncreases
+    def getRaceAbilities(self)->set:
+        abilities = {"Artificer's Lore","Tinker"}
+        abilities.update(super(RockGnome,self).getRaceAbilities())
+        return abilities
+    def __str__(self)->str:
+        return "Rock Gnome"
+class HalfElf(Race):
+    def getScoreIncreases(self)->dict:
+        return {Abilities.CHARISMA:2}
+    def getRaceAbilities(self)->set:
+        return {"Darkvision","Fey Ancestry","Skill Versatility", "Ability Score Increase"}
+    def __str__(self)->str:
+        return "Half-Elf"
+class HalfOrc(Race):
+    def getScoreIncreases(self)->dict:
+        return {Abilities.STRENGTH:2, Abilities.CONSTITUTION:1}
+    def getRaceAbilities(self)->set:
+        return {"Darkvision","Relentless Endurance","Savage Attacks"}
+    def getSkillProficiencies(self)->set:
+        return {Skills.INTIMIDATION}
+    def __str__(self)->str:
+        return "Half-Orc"
+class Tiefling(Race):
+    def getScoreIncreases(self)->dict:
+        return {Abilities.INTELLIGENCE:1,Abilities.CHARISMA:2}
+    def getRaceAbilities(self)->set:
+        return {"Darkvision","Hellish Resistance","Infernal Legacy"}
+    def __str__(self)->str:
+        return "Tiefling"
 RACE_MAP = {
-    0:HillDwarf(),1:MountainDwarf(),
-    2:HighElf(), 3:WoodElf(), 4:DarkElf(),
-    5:LightfootHalfling(), 6:StoutHalfling(),
-    7: Human(),
-    8:"Dragonborn",
-    9:"Forest Gnome", 10: "Rock Gnome",
-    11:"Half-Elf",
-    12:"Half-Orc",
-    13:"Tiefling"
+    0:HillDwarf,1:MountainDwarf,
+    2:HighElf, 3:WoodElf, 4:DarkElf,
+    5:LightfootHalfling, 6:StoutHalfling,
+    7: Human,
+    8:Dragonborn,
+    9:ForestGnome, 10:RockGnome,
+    11:HalfElf,
+    12:HalfOrc,
+    13:Tiefling
     }

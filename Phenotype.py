@@ -120,13 +120,12 @@ class Phenotype:
         self.adjustByBackground(self.background)
 
         #Adjust Stats by Race
-        self.race = Race.RACE_MAP[sumArray(raceChromosome)]
+        self.race = Race.RACE_MAP[sumArray(raceChromosome)]()
         self.adjustByRace(self.race)        
         
         #Adjust Stats by Class
         self.characterClass = CharacterClass.CLASS_MAP[sumArray(classChromosome)]
         self.adjustByClass(self.characterClass)
-        
         self.renderDerivedStats()
 
     def __str__(self) -> str:

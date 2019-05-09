@@ -38,8 +38,9 @@ class Individual:
             self.genes[ix] = 1
         else:
             self.genes[ix] = 0
-        self.phenotype = Phenotype.Phenotype(self.genes)
+
     def __str__(self) -> str:
+        import Race
         ret = f"Phenotype:\n{self.getPhenotype()}\
             \nGenes:\n{self.genes}"
         return ret
@@ -65,11 +66,29 @@ def makeStout(individual):
 def makeHuman(individual):
     makeStout(individual)
     individual.flipBit(154)
+def makeDragonborn(individual):
+    makeHuman(individual)
+    individual.flipBit(155)
+def makeForestGnome(individual):
+    makeDragonborn(individual)
+    individual.flipBit(156)
+def makeRockGnome(individual):
+    makeForestGnome(individual)
+    individual.flipBit(157)
+def makeHalfElf(individual):
+    makeRockGnome(individual)
+    individual.flipBit(158)
+def makeHalfOrc(individual):
+    makeHalfElf(individual)
+    individual.flipBit(159)
+def makeTiefling(individual):
+    makeHalfOrc(individual)
+    individual.flipBit(160)
 
 def main():
     individual = Individual(array('b',[0]*Phenotype.GENOME_LENGTH))
     print(Phenotype.GENOME_LENGTH)
-    makeHuman(individual)
+    makeTiefling(individual)
     print(individual)
     
 
