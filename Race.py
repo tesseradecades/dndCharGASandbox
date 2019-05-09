@@ -1,37 +1,65 @@
 import Abilities
+import Armors
 import Weapons
 class Race:
-
-    scoreIncreases = {
-        Abilities.STRENGTH:0,
-        Abilities.DEXTERITY:0,
-        Abilities.CONSTITUTION:0,
-        Abilities.INTELLIGENCE:0,
-        Abilities.WISDOM:0,
-        Abilities.CHARISMA:0
-        }
-    speed = 0
-    raceAbilities = set()
-    weaponProficiencies = set()
-    def __init__(self):
+    """def __init__(self):
         pass
+    """
     def __str__(self) -> str:
         return "None"
-class Dwarf(Race):
     
-    def __init__(self):
-        super(Dwarf,self).__init__()
-        self.scoreIncreases[Abilities.CONSTITUTION]+=2
-        self.speed = 25
-        self.weaponProficiencies = Weapons.DWARVEN_COMBAT_TRAINING
+    def getScoreIncreases(self)->dict:
+        return dict()
+    def getSpeed(self)->int:
+        return 0
+    def getRaceAbilities(self)->set:
+        return set()
+    def getWeaponProficiencies(self)->set:
+        return set()
+    def getArmorProficiencies(self)->set:
+        return set()
+class Dwarf(Race):
+
+    def getScoreIncreases(self)->dict:
+        return {Abilities.CONSTITUTION:2}
+    def getSpeed(self)->int:
+        return 25
+    def getWeaponProficiencies(self)->set:
+        return Weapons.DWARVEN_COMBAT_TRAINING
+    def getRaceAbilities(self)->set:
+        return {"Darkvision","Dwarven Resilience","Tool Proficiency","Stonecunning"}
+
 class HillDwarf(Dwarf):
-    def __init__(self):
-        super(HillDwarf,self).__init__()
-        self.scoreIncreases[Abilities.WISDOM]+=1
+
+    def getScoreIncreases(self)->dict:
+        scoreIncreases = super(HillDwarf,self).getScoreIncreases()
+        scoreIncreases[Abilities.WISDOM]=1
+        return scoreIncreases
+
+    def getRaceAbilities(self)->set:
+        raceAbilities = super(HillDwarf,self).getRaceAbilities()
+        raceAbilities.add("Dwarven Toughness")
+        return raceAbilities
+
     def __str__(self)->str:
         return "Hill Dwarf"
+class MountainDwarf(Dwarf):
+
+    def getScoreIncreases(self) -> dict:
+        scoreIncreases = super(MountainDwarf,self).getScoreIncreases()
+        scoreIncreases[Abilities.STRENGTH]=2
+        return scoreIncreases
+
+    def getArmorProficiencies(self)->set:
+        armorProficiencies = super(MountainDwarf,self).getArmorProficiencies()
+        armorProficiencies.update(Armors.DWARVEN_ARMOR_TRAINING)
+        return armorProficiencies
+
+    def __str__(self)->str:
+        return "Mountain Dwarf"
+
 RACE_MAP = {
-    0:HillDwarf(),1:"Mountain Dwarf",
+    0:HillDwarf(),1:MountainDwarf(),
     2:"High Elf", 3: "Wood Elf", 4: "Dark Elf",
     5:"Lightfoot Halfling", 6:"Stout Halfling",
     7: "Human",

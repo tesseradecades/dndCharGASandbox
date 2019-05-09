@@ -51,7 +51,8 @@ def main():
     print(Phenotype.GENOME_LENGTH)
     print(individual)
     print()
-    individual.flipBit(1)
+    individual.flipBit(140)
+    individual.flipBit(141)
     print(individual)
 
 if __name__ == "__main__":

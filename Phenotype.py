@@ -16,7 +16,7 @@ GENOME_LENGTH = (5*POINTS)+(len(Background.BACKGROUND_MAP)-1)+(len(Race.RACE_MAP
 
 class Phenotype:
 
-    proficiency = 6
+    proficiency = 2
 
     race = None
     background = None
@@ -114,22 +114,19 @@ class Phenotype:
         for chromosome in pointChromosomes:
             pointMap[sumArray(chromosome)]+=1
         self.renderScoresFromPoints(pointMap)
-        #Adjust Stats by Race
-        self.race = Race.RACE_MAP[sumArray(raceChromosome)]
-        race = self.race
-        for score in self.abilityScores.keys():
-            self.abilityScores[score] += race.scoreIncreases[score]
-        self.speed = race.speed
-        for weapon in race.weaponProficiencies:
-            self.weaponProficiencies.add(weapon)
 
         #Adjust Stats by Background
         self.background = Background.BACKGROUND_MAP[sumArray(backgroundChromosome)]
-        for skill in self.background.skillProficiencies:
-            self.skillProficiencies.add(skill)
+        self.adjustByBackground(self.background)
 
+        #Adjust Stats by Race
+        self.race = Race.RACE_MAP[sumArray(raceChromosome)]
+        self.adjustByRace(self.race)        
+        
         #Adjust Stats by Class
         self.characterClass = CharacterClass.CLASS_MAP[sumArray(classChromosome)]
+        self.adjustByClass(self.characterClass)
+        
         self.renderDerivedStats()
 
     def __str__(self) -> str:
@@ -178,6 +175,21 @@ class Phenotype:
             return 18
         else:
             return 8
+
+    def adjustByBackground(self, background: Background):
+        self.skillProficiencies.update(background.skillProficiencies)
+
+    def adjustByRace(self, race: Race):
+        scoreIncreases = race.getScoreIncreases()
+        for score in scoreIncreases.keys():
+            self.abilityScores[score] += scoreIncreases[score]
+        self.speed = race.getSpeed()
+        self.armorProficiencies.update(race.getArmorProficiencies())
+        self.weaponProficiencies.update(race.getWeaponProficiencies())
+        self.abilities.update(race.getRaceAbilities())
+
+    def adjustByClass(self, characterClass: CharacterClass):
+        pass
 
     def renderDerivedStats(self):
         #Modifiers
