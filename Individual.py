@@ -1,15 +1,10 @@
 from array import array
-
-CLASS_CHROMOSOME_LENGTH = 40
-POINTS = 27
-RACE_CHROMOSOME_LENGTH = 13
-
-GENOME_LENGTH = (5*POINTS)+(RACE_CHROMOSOME_LENGTH)+(CLASS_CHROMOSOME_LENGTH)
+import Phenotype
 
 class Individual:
     fitness = None
 
-    genes = None#[0]*GENOME_LENGTH
+    genes = None
 
     phenotype = None
 
@@ -18,9 +13,10 @@ class Individual:
     
     def getPhenotype(self):
         if(self.phenotype != None):
-            return phenotype
+            return self.phenotype
         else:
-            return None
+            self.phenotype = Phenotype.Phenotype(self.genes)
+            return self.phenotype
     def getFitness(self) -> int:
         if(self.fitness != None):
             return fitness
@@ -28,48 +24,54 @@ class Individual:
             return calculateFitness(self.getPhenotype())
     
     def calculateFitness(self,phenotype) -> int:
-        return (getDefensiveChallengeRating(phenotype) + getOffensiveChallengeRating(phenotype))//2
+        return (getDefensiveChallengeRating(phenotype) + getOffensiveChallengeRating(phenotype))/2
     
     def getDefensiveChallengeRating(self,phenotype)-> int:
         return 0
     
     def getOffensiveChallengeRating(self,phenotype) -> int:
         return 0
-    
-    def getPointChromosome(self,point: int) -> array:
-        stop = point * 5
-        start = stop - 5
-        return self.genes[start:stop]
-    
-    def getRaceChromosome(self) -> array:
-        start = 5*POINTS
-        return self.genes[start:start+RACE_CHROMOSOME_LENGTH]
-    def getClassChromosome(self) -> array:
-        start = (5*POINTS)+RACE_CHROMOSOME_LENGTH
-        return self.genes[start:start+CLASS_CHROMOSOME_LENGTH]
-    
+        
     def flipBit(self,bit: int):
         ix = bit-1
         if(self.genes[ix] == 0):
             self.genes[ix] = 1
         else:
             self.genes[ix] = 0
+        self.phenotype = Phenotype.Phenotype(self.genes)
+    def __str__(self) -> str:
+        ret = f"Phenotype:\n{self.getPhenotype()}\
+            \nGenes:\n{self.genes}"
+        return ret
+def makeMountainDwarf(individual):
+    individual.flipBit(148)
 
-    
+def makeHighElf(individual):
+    makeMountainDwarf(individual)
+    individual.flipBit(149)
 
+def makeWoodElf(individual):
+    makeHighElf(individual)
+    individual.flipBit(150)
+def makeDarkElf(individual):
+    makeWoodElf(individual)
+    individual.flipBit(151)
+def makeLightfoot(individual):
+    makeDarkElf(individual)
+    individual.flipBit(152)
+def makeStout(individual):
+    makeLightfoot(individual)
+    individual.flipBit(153)
+def makeHuman(individual):
+    makeStout(individual)
+    individual.flipBit(154)
 
 def main():
-    individual = Individual(array('b',[0]*GENOME_LENGTH))
-    print(individual.genes)
-    print(len(individual.genes))
-    individual.genes[5]=1
-    individual.genes[9]=1
-    print(individual.getPointChromosome(1))
-    print(len(individual.getRaceChromosome()))
-    print(len(individual.getClassChromosome()))
-    print(individual.genes)
-    individual.flipBit(1)
-    print(individual.genes)
+    individual = Individual(array('b',[0]*Phenotype.GENOME_LENGTH))
+    print(Phenotype.GENOME_LENGTH)
+    makeHuman(individual)
+    print(individual)
+    
 
 if __name__ == "__main__":
     main()
