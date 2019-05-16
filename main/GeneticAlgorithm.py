@@ -8,5 +8,7 @@ def generateInitialPopulation(genomeLength:int)->list:
     return initialPopulation
 #Fitness Function
 #Selection
+def selection(population:list, fitnessFunction)->tuple:
+    return ()
 #Crossover
 #Mutation
