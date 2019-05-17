@@ -4,6 +4,8 @@ from array import array
 
 #Initial Population
 def generateInitialPopulation(genomeLength:int)->list:
+    if(genomeLength < 2):
+        raise Exception("Genome too short")
     initialPopulation = []
     for i in range(4):
         initialPopulation.append(array('b',[0]*genomeLength))
@@ -37,21 +39,13 @@ def mutation(individual:array, mutationPoint:int):
         individual[mutationPoint]=0
 
 def converged(parents:tuple,children:tuple)->bool:
+    if(len(parents[0]) < 2):
+        raise Exception("Genome too short")
+    return computeHammingDistance(parents[0]+parents[1],children[0]+children[1]) <=2
 
-    return True
-
-def computeHammingDistance(array1:array,array2:array)->int:
-    array1Length = len(array1)
-    array2Length = len(array2)
-    hammingDistance = 0
-    if(array1Length < array2Length):
-        short = array1Length
-    else:
-        short = array2Length
-    if(array1Length != array2Length):
-        hammingDistance = abs(array1Length - array2Length)
-    
-    for item in range(short):
+def computeHammingDistance(array1:array,array2:array)->int:    
+    hammingDistance=0
+    for item in range(len(array1)):
         if(array1[item] != array2[item]):
             hammingDistance+=1
     return hammingDistance

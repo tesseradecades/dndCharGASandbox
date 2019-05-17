@@ -101,16 +101,16 @@ class TestCrossoverMethod(unittest.TestCase):
 class TestConvergedMethod(unittest.TestCase):
     def test_returns_true_when_converged(self):
         #Arrange
-        parents = (array('b',[0]),array('b',[0]))
-        children = (array('b',[0]),array('b',[0]))
+        parents = (array('b',[0]*2),array('b',[0]*2))
+        children = (array('b',[0]*2),array('b',[0]*2))
         #Act
         converged = GeneticAlgorithm.converged(parents,children)
         #Assert
         self.assertTrue(converged)
     def test_returns_false_when_not_converged(self):
         #Arrange
-        parents = (array('b',[0]),array('b',[0]))
-        children = (array('b',[1]),array('b',[1]))
+        parents = (array('b',[0]*2),array('b',[0]*2))
+        children = (array('b',[1]*2),array('b',[1]*2))
         #Act
         converged = GeneticAlgorithm.converged(parents,children)
         #Assert
