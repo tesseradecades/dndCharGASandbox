@@ -26,5 +26,5 @@ def crossover(parent1:array, parent2:array)->tuple:
     return crossover(parent1,parent2,random.randint(len(parent1)))
 
 def crossover(parent1:array, parent2:array, crossoverPoint: int)->tuple:
-    return ()
+    return (parent1[:crossoverPoint]+parent2[crossoverPoint:],parent2[:crossoverPoint]+parent1[crossoverPoint:])
 #Mutation
