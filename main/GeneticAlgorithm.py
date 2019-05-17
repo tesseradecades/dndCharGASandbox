@@ -1,4 +1,5 @@
 import operator
+import random
 from array import array
 
 #Initial Population
@@ -21,4 +22,9 @@ def selection(population:list, fitnessFunction)->tuple:
 def getKeyOfMaxValue(d:dict)->object:
     return max(d.items(), key=operator.itemgetter(1))[0]
 #Crossover
+def crossover(parent1:array, parent2:array)->tuple:
+    return crossover(parent1,parent2,random.randint(len(parent1)))
+
+def crossover(parent1:array, parent2:array, crossoverPoint: int)->tuple:
+    return ()
 #Mutation
