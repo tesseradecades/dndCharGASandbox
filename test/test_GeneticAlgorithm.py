@@ -1,6 +1,6 @@
 import unittest
 from array import array
-from main.GeneticAlgorithm import GeneticAlgorithm as GeneticAlgorithm
+from main.GeneticAlgorithm.GeneticAlgorithm import GeneticAlgorithm as GeneticAlgorithm
 
 class TestInitialPopulationMethod(unittest.TestCase):
     def test_initial_population_genome_length(self):
