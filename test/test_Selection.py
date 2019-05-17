@@ -20,3 +20,5 @@ class TestInitialPopulationMethod(unittest.TestCase):
         fittestTwo = selection(population, fitnessFunction)
         #Assert
         self.assertSequenceEqual((fittest,secondFittest),fittestTwo)
+if __name__ == '__main__':
+    unittest.main()
