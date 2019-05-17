@@ -28,3 +28,10 @@ def crossover(parent1:array, parent2:array)->tuple:
 def crossover(parent1:array, parent2:array, crossoverPoint: int)->tuple:
     return (parent1[:crossoverPoint]+parent2[crossoverPoint:],parent2[:crossoverPoint]+parent1[crossoverPoint:])
 #Mutation
+def mutation(individual:array):
+    return mutation(individual, random.randint(len(individual)))
+def mutation(individual:array, mutationPoint:int):
+    if(individual[mutationPoint]==0):
+        individual[mutationPoint]=1
+    else:
+        individual[mutationPoint]=0
