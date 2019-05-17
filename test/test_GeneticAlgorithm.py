@@ -1,29 +1,32 @@
 import unittest
 from array import array
-import main.GeneticAlgorithm as GeneticAlgorithm
+from main.GeneticAlgorithm import GeneticAlgorithm as GeneticAlgorithm
 
 class TestInitialPopulationMethod(unittest.TestCase):
     def test_initial_population_genome_length(self):
         #Arrange
         genomeLength = 199
+        ga = GeneticAlgorithm()
         #Act
-        initialPopulation = GeneticAlgorithm.generateInitialPopulation(genomeLength)
+        initialPopulation = ga.generateInitialPopulation(genomeLength)
         #Assert
         actual =len(initialPopulation[0])
         self.assertEqual(genomeLength,actual)
     def test_initial_population_size_is_four(self):
         #Arrange
         genomeLength = 199
+        ga = GeneticAlgorithm()
         #Act
-        initialPopulation = GeneticAlgorithm.generateInitialPopulation(genomeLength)
+        initialPopulation = ga.generateInitialPopulation(genomeLength)
         #Assert
         actual = len(initialPopulation)
         self.assertEqual(4,actual)
     def test_initial_population_has_same_size_genomes(self):
         #Arrange
         genomeLength = 199
+        ga = GeneticAlgorithm()
         #Act
-        initialPopulation = GeneticAlgorithm.generateInitialPopulation(genomeLength)
+        initialPopulation = ga.generateInitialPopulation(genomeLength)
         #Assert
         self.assertGreater(len(initialPopulation),0)
         for individual in initialPopulation:
@@ -34,6 +37,7 @@ class TestSelectionMethod(unittest.TestCase):
     def test_chooses_fittest_individuals(self):
         #Arrange
         genomeLength = 199
+        ga = GeneticAlgorithm()
         fittest = array('b',[0]*genomeLength)
         secondFittest = array('b',[0]*genomeLength)
         secondFittest[0] = 1
@@ -46,7 +50,7 @@ class TestSelectionMethod(unittest.TestCase):
                     f+=1
             return f
         #Act
-        fittestTwo = GeneticAlgorithm.selection(population, fitnessFunction)
+        fittestTwo = ga.selection(population, fitnessFunction)
         #Assert
         self.assertSequenceEqual((fittest,secondFittest),fittestTwo)
 
@@ -57,8 +61,9 @@ class TestCrossoverMethod(unittest.TestCase):
         parent1 = array('b',[0]*genomeLength)
         parent2 = array('b',[1]*genomeLength)
         crossoverPoint = genomeLength // 2
+        ga = GeneticAlgorithm()
         #Act
-        children = GeneticAlgorithm.crossover(parent1,parent2, crossoverPoint)
+        children = ga.crossover(parent1,parent2, crossoverPoint)
         #Assert
         child1 = children[0]
         child2 = children[1]
@@ -74,8 +79,9 @@ class TestCrossoverMethod(unittest.TestCase):
         #Arrange
         individual = array('b',[0]*10)
         mutationPoint = 5
+        ga = GeneticAlgorithm()
         #Act
-        GeneticAlgorithm.mutation(individual,mutationPoint)
+        ga.mutation(individual,mutationPoint)
         #Assert
         self.assertEqual(1,individual[mutationPoint])
         for gene in range(mutationPoint):
@@ -86,16 +92,18 @@ class TestCrossoverMethod(unittest.TestCase):
         #Arrange
         individual = array('b',[0])
         mutationPoint = 0
+        ga = GeneticAlgorithm()
         #Act
-        GeneticAlgorithm.mutation(individual,mutationPoint)
+        ga.mutation(individual,mutationPoint)
         #Assert
         self.assertEqual(1,individual[mutationPoint])
     def test_mutation_switches_from_one_to_zero(self):
         #Arrange
         individual = array('b',[1])
         mutationPoint = 0
+        ga = GeneticAlgorithm()
         #Act
-        GeneticAlgorithm.mutation(individual,mutationPoint)
+        ga.mutation(individual,mutationPoint)
         #Assert
         self.assertEqual(0,individual[mutationPoint])
 class TestConvergedMethod(unittest.TestCase):
@@ -103,16 +111,18 @@ class TestConvergedMethod(unittest.TestCase):
         #Arrange
         parents = (array('b',[0]*2),array('b',[0]*2))
         children = (array('b',[0]*2),array('b',[0]*2))
+        ga = GeneticAlgorithm()
         #Act
-        converged = GeneticAlgorithm.converged(parents,children)
+        converged = ga.converged(parents,children)
         #Assert
         self.assertTrue(converged)
     def test_returns_false_when_not_converged(self):
         #Arrange
         parents = (array('b',[0]*2),array('b',[0]*2))
         children = (array('b',[1]*2),array('b',[1]*2))
+        ga = GeneticAlgorithm()
         #Act
-        converged = GeneticAlgorithm.converged(parents,children)
+        converged = ga.converged(parents,children)
         #Assert
         self.assertFalse(converged)
 class TestHammingDistanceComputation(unittest.TestCase):
@@ -120,16 +130,18 @@ class TestHammingDistanceComputation(unittest.TestCase):
         #Arrange
         array1 = array('b',[0])
         array2 = array('b',[0])
+        ga = GeneticAlgorithm()
         #Act
-        hammingDistance = GeneticAlgorithm.computeHammingDistance(array1,array2)
+        hammingDistance = ga.computeHammingDistance(array1,array2)
         #Assert
         self.assertEqual(hammingDistance,0)
     def test_returns_n_on_opposite_arrays(self):
         #Arrange
         array1 = array('b',[0])
         array2 = array('b',[1])
+        ga = GeneticAlgorithm()
         #Act
-        hammingDistance = GeneticAlgorithm.computeHammingDistance(array1,array2)
+        hammingDistance = ga.computeHammingDistance(array1,array2)
         #Assert
         self.assertEqual(hammingDistance,1)
     def test_returns_one_on_near_same_arrays(self):
@@ -137,8 +149,9 @@ class TestHammingDistanceComputation(unittest.TestCase):
         array1 = array('b',[0]*10)
         array2 = array('b',[0]*10)
         array2[0]=1
+        ga = GeneticAlgorithm()
         #Act
-        hammingDistance = GeneticAlgorithm.computeHammingDistance(array1,array2)
+        hammingDistance = ga.computeHammingDistance(array1,array2)
         #Assert
         self.assertEqual(hammingDistance,1)
 if __name__ == '__main__':
