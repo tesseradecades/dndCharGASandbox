@@ -29,9 +29,32 @@ def crossover(parent1:array, parent2:array, crossoverPoint: int)->tuple:
     return (parent1[:crossoverPoint]+parent2[crossoverPoint:],parent2[:crossoverPoint]+parent1[crossoverPoint:])
 #Mutation
 def mutation(individual:array):
-    return mutation(individual, random.randint(len(individual)))
+    mutation(individual, random.randint(len(individual)))
 def mutation(individual:array, mutationPoint:int):
     if(individual[mutationPoint]==0):
         individual[mutationPoint]=1
     else:
         individual[mutationPoint]=0
+
+def converged(parents:tuple,children:tuple)->bool:
+
+    return True
+
+def computeHammingDistance(array1:array,array2:array)->int:
+    array1Length = len(array1)
+    array2Length = len(array2)
+    hammingDistance = 0
+    if(array1Length < array2Length):
+        short = array1Length
+    else:
+        short = array2Length
+    if(array1Length != array2Length):
+        hammingDistance = abs(array1Length - array2Length)
+    
+    for item in range(short):
+        if(array1[item] != array2[item]):
+            hammingDistance+=1
+    return hammingDistance
+
+def run(genomeLength:int,fitnessFunction)->array:
+    population = generateInitialPopulation(genomeLength)
