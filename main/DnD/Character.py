@@ -42,7 +42,9 @@ class Character():
             \nCharisma:\t{self.abilityScores[AbilityScores.CHARISMA]}"
         return ret
 def main():
-    print(Character(Race.RACES[7]))
+    from .Backgrounds.Acolyte import Acolyte
+    from.Races.Human import Human
+    print(Character(Human(),Acolyte()))
 
 if __name__ == "__main__":
     main()
