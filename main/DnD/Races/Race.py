@@ -1,3 +1,4 @@
+"""
 from enum import Enum
 class Race(Enum):
     HILL_DWARF = 0,
@@ -23,6 +24,7 @@ class Race(Enum):
     HALF_ELF = 20,
     HALF_ORC = 21,
     TIEFLING = 22
+"""
 
 RACES = {
     0:"Hill Dwarf",
@@ -49,3 +51,6 @@ RACES = {
     21:"Half-Orc",
     22:"Tiefling"
 }
+
+class Race():
+    abilities = set()

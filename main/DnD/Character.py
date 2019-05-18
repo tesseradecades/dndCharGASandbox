@@ -1,5 +1,5 @@
-from AbilityScores import AbilityScores
-from Races import Race
+from .AbilityScores import AbilityScores
+from .Races import Race
 
 class Character():
 
@@ -27,7 +27,7 @@ class Character():
             \nCharisma:\t{self.abilityScores[AbilityScores.CHARISMA]}"
         return ret
 def main():
-    print(Character(Race.RACES[0]))
+    print(Character(Race.RACES[7]))
 
 if __name__ == "__main__":
     main()
