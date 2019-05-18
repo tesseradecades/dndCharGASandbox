@@ -53,4 +53,5 @@ RACES = {
 }
 
 class Race():
-    abilities = set()
+    def getAbilities(self)->set:
+        return set()

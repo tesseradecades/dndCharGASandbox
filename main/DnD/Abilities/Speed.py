@@ -8,3 +8,5 @@ class Speed(Ability):
         self.speed=speed
     def concreteEffect(self,character:Character):
         character.speed=self.speed
+    def __str__(self)->str:
+        return f"Speed of {self.speed}"

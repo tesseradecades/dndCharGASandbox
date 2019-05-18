@@ -11,3 +11,5 @@ class AbilityScoreIncrease(Ability):
         self.increase=increase
     def concreteEffect(self,character:Character):
         character.abilityScores[self.score]+=self.increase
+    def __str__(self)->str:
+        return f"Increase {self.score} by {self.increase}"
