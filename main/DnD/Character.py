@@ -1,5 +1,7 @@
 from .AbilityScores import AbilityScores
+from .Backgrounds import Background
 from .Races import Race
+
 
 class Character():
 
@@ -10,7 +12,11 @@ class Character():
 
     speed = 0
 
-    def __init__(self, race: Race):
+    background = None
+
+    skillProficiencies = set()
+
+    def __init__(self, race: Race,background:Background):
         self.abilityScores = {
             AbilityScores.STRENGTH:0,
             AbilityScores.DEXTERITY:0,
@@ -19,9 +25,13 @@ class Character():
             AbilityScores.WISDOM:0,
             AbilityScores.CHARISMA:0
         }
+        self.skillProficiencies = set()
         self.race = race
         for ability in self.race.getAbilities():
             ability.concreteEffect(self)
+        self.background = background
+        for proficiency in background.getSkillProficiencies():
+            self.skillProficiencies.add(proficiency)
     def __str__(self)->str:
         ret = f"Race:\t\t{self.race}\
             \nStrength:\t{self.abilityScores[AbilityScores.STRENGTH]}\
