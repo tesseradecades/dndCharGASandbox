@@ -1,5 +1,5 @@
 from array import array
-from enum import Enum
+from enum import IntEnum
 try:
     from Character import Character
 except ModuleNotFoundError:#So that unittests can use this module
@@ -19,14 +19,55 @@ class Phenotype:
     def createCharacter(self,genes:array)-> Character:
         pass
     def getStats(self,statGenes:array)->dict:
-        return {
-            AbilityScores.STRENGTH:8,
-            AbilityScores.DEXTERITY:8,
-            AbilityScores.CONSTITUTION:8,
-            AbilityScores.INTELLIGENCE:8,
-            AbilityScores.WISDOM:8,
-            AbilityScores.CHARISMA:8
+        points = self.getPoints(statGenes)
+        stats = {
+            AbilityScores.STRENGTH:0,
+            AbilityScores.DEXTERITY:0,
+            AbilityScores.CONSTITUTION:0,
+            AbilityScores.INTELLIGENCE:0,
+            AbilityScores.WISDOM:0,
+            AbilityScores.CHARISMA:0
         }
+        for score in points.keys():
+            stats[score] = self.renderScore(points[score])
+        return stats
+    def getPoints(self,statGenes:array)->dict:
+        pointsDict = {
+            AbilityScores.STRENGTH:0,
+            AbilityScores.DEXTERITY:0,
+            AbilityScores.CONSTITUTION:0,
+            AbilityScores.INTELLIGENCE:0,
+            AbilityScores.WISDOM:0,
+            AbilityScores.CHARISMA:0
+        }
+        for point in range(POINTS):
+            end = (point+1)*5
+            start = end-5
+            value = 0
+            for gene in statGenes[start:end]:
+                value+=gene
+            pointsDict[value]+=1
+        return pointsDict
+    def renderScore(self, points: int)-> int:
+        if(points == 0):
+            return 8
+        if(points <= 5):
+            return 8+points
+        if(points == 6):
+            return 13
+        if(points <= 8):
+            return 14
+        if(points <= 11):
+            return 15
+        if(points <=14):
+            return 16
+        if(points <=18):
+            return 17
+        if(points > 18):
+            return 18
+        else:
+            return 8
+
     def getRace(self,raceGenes:array):
         return "Human"
     def getBackground(self,backgroundGenes:array):
@@ -45,14 +86,16 @@ class Phenotype:
             \nFeats:\t\t{self.feats}"
         return toString
 
-class AbilityScores(Enum):
+POINTS = 27
+class AbilityScores(IntEnum):
     STRENGTH = 0,
     DEXTERITY = 1,
     CONSTITUTION = 2,
     INTELLIGENCE = 3,
     WISDOM = 4,
     CHARISMA = 5
-ABILITY_SCORE_GENOME_LENGTH = ((len(AbilityScores)-1)*27)
+ABILITY_SCORE_GENOME_LENGTH = ((len(AbilityScores)-1)*POINTS)
+
 RACES = {
     0:"Hill Dwarf",
     1:"Mountain Dwarf",
