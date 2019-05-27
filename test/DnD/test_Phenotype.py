@@ -39,36 +39,48 @@ class TestGetStats(unittest.TestCase):
 class TestGetClass(unittest.TestCase):
     def test_gets_appropriate_class_from_all_0(self):
         #Arrange
+        phenotype = p.Phenotype(array('b',[0]*p.GENOME_LENGTH))
         #Act
+        characterClass = phenotype.getClass(array('b',[0]*p.CLASSES_GENOME_LENGTH))
         #Assert
-        self.assertTrue(False)
+        self.assertEqual(characterClass,p.CLASSES[0])
     def test_gets_appropriate_class_from_all_1(self):
         #Arrange
+        phenotype = p.Phenotype(array('b',[0]*p.GENOME_LENGTH))
         #Act
+        characterClass = phenotype.getClass(array('b',[1]*p.CLASSES_GENOME_LENGTH))
         #Assert
-        self.assertTrue(False)
+        self.assertEqual(characterClass,p.CLASSES[p.CLASSES_GENOME_LENGTH])
 class TestGetRace(unittest.TestCase):
     def test_gets_appropriate_race_from_all_0(self):
         #Arrange
+        phenotype = p.Phenotype(array('b',[0]*p.GENOME_LENGTH))
         #Act
+        race = phenotype.getRace(array('b',[0]*p.RACES_GENOME_LENGTH))
         #Assert
-        self.assertTrue(False)
+        self.assertEqual(race,p.RACES[0])
     def test_gets_appropriate_race_from_all_1(self):
         #Arrange
+        phenotype = p.Phenotype(array('b',[0]*p.GENOME_LENGTH))
         #Act
+        race = phenotype.getRace(array('b',[1]*p.RACES_GENOME_LENGTH))
         #Assert
-        self.assertTrue(False)
+        self.assertEqual(race,p.RACES[p.RACES_GENOME_LENGTH])
 class TestGetBackground(unittest.TestCase):
     def test_gets_appropriate_background_from_all_0(self):
         #Arrange
+        phenotype = p.Phenotype(array('b',[0]*p.GENOME_LENGTH))
         #Act
+        background = phenotype.getBackground(array('b',[0]*p.BACKGROUNDS_GENOME_LENGTH))
         #Assert
-        self.assertTrue(False)
+        self.assertEqual(background,p.BACKGROUNDS[0])
     def test_gets_appropriate_background_from_all_1(self):
         #Arrange
+        phenotype = p.Phenotype(array('b',[0]*p.GENOME_LENGTH))
         #Act
+        background = phenotype.getBackground(array('b',[1]*p.BACKGROUNDS_GENOME_LENGTH))
         #Assert
-        self.assertTrue(False)
+        self.assertEqual(background,p.BACKGROUNDS[p.BACKGROUNDS_GENOME_LENGTH])
 class TestGetFeats(unittest.TestCase):
     def test_gets_appropriate_feats_from_all_0(self):
         #Arrange

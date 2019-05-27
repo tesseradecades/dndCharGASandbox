@@ -8,12 +8,6 @@ except ModuleNotFoundError:#So that unittests can use this module
 class Phenotype:
 
     def __init__(self,genes:array):
-        self.startingStats = self.getStats(genes)
-        self.race = self.getRace(genes)
-        self.background = self.getBackground(genes)
-        self.characterClass = self.getClass(genes)
-        self.abilities = set()
-        self.feats = set()
         pass
     
     def createCharacter(self,genes:array)-> Character:
@@ -43,11 +37,14 @@ class Phenotype:
         for point in range(POINTS):
             end = (point+1)*5
             start = end-5
-            value = 0
-            for gene in statGenes[start:end]:
-                value+=gene
+            value = self.getChromosomeValue(statGenes[start:end])
             pointsDict[value]+=1
         return pointsDict
+    def getChromosomeValue(self,chromosome:array)->int:
+        value = 0
+        for gene in chromosome:
+            value+=gene
+        return value
     def renderScore(self, points: int)-> int:
         if(points == 0):
             return 8
@@ -69,11 +66,11 @@ class Phenotype:
             return 8
 
     def getRace(self,raceGenes:array):
-        return "Human"
+        return RACES[self.getChromosomeValue(raceGenes)]
     def getBackground(self,backgroundGenes:array):
-        return "Acolyte"
+        return BACKGROUNDS[self.getChromosomeValue(backgroundGenes)]
     def getClass(self,classGenes:array):
-        return "Path of the Berserker Barbarian"
+        return CLASSES[self.getChromosomeValue(classGenes)]
     def getFeats(self,featGenes:array)->set:
         return set()
 
