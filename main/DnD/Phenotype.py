@@ -20,12 +20,12 @@ class Phenotype:
         pass
     def getStats(self,statGenes:array)->dict:
         return {
-            str(AbilityScores.STRENGTH):8,
-            str(AbilityScores.DEXTERITY):8,
-            str(AbilityScores.CONSTITUTION):8,
-            str(AbilityScores.INTELLIGENCE):8,
-            str(AbilityScores.WISDOM):8,
-            str(AbilityScores.CHARISMA):8
+            AbilityScores.STRENGTH:8,
+            AbilityScores.DEXTERITY:8,
+            AbilityScores.CONSTITUTION:8,
+            AbilityScores.INTELLIGENCE:8,
+            AbilityScores.WISDOM:8,
+            AbilityScores.CHARISMA:8
         }
     def getRace(self,raceGenes:array):
         return "Human"
@@ -52,7 +52,7 @@ class AbilityScores(Enum):
     INTELLIGENCE = 3,
     WISDOM = 4,
     CHARISMA = 5
-
+ABILITY_SCORE_GENOME_LENGTH = ((len(AbilityScores)-1)*27)
 RACES = {
     0:"Hill Dwarf",
     1:"Mountain Dwarf",
@@ -78,6 +78,7 @@ RACES = {
     21:"Half-Orc",
     22:"Tiefling"
 }
+RACES_GENOME_LENGTH = len(RACES)-1
 
 BACKGROUNDS = {
     0:"Acolyte",
@@ -94,6 +95,7 @@ BACKGROUNDS = {
     11:"Soldier",
     12:"Urchin"
 }
+BACKGROUNDS_GENOME_LENGTH = len(BACKGROUNDS)-1
 
 CLASSES = {
     0:"Path of the Berserker Barbarian",
@@ -137,8 +139,9 @@ CLASSES = {
     38:"Necromancy Wizard",
     39:"Transmutation Wizard"
 }
+CLASSES_GENOME_LENGTH = len(CLASSES)-1
 
-GENOME_LENGTH = ((len(AbilityScores)-1)*27)+(len(RACES)-1)+(len(BACKGROUNDS)-1)+(len(CLASSES)-1)
+GENOME_LENGTH = ABILITY_SCORE_GENOME_LENGTH+RACES_GENOME_LENGTH+BACKGROUNDS_GENOME_LENGTH+CLASSES_GENOME_LENGTH
 
 def main():
     print(GENOME_LENGTH)
