@@ -9,3 +9,4 @@ class Character():
         self.senses=dict()
         self.resistances=set()
         self.hitPoints = 0
+        self.weaponProficiencies = set()
