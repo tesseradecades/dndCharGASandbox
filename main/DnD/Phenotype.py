@@ -20,17 +20,7 @@ class Phenotype:
         start = end
         end = start+CLASSES_GENOME_LENGTH
         self.characterClass = self.getClass(genes[start:end])
-        numFeats = 0
-        if(level >=4):
-            numFeats+=1
-        if(level >= 8):
-            numFeats+=1
-        if(level >= 12):
-            numFeats+=1
-        if(level >= 16):
-            numFeats+=1
-        if(level >= 19):
-            numFeats+=1
+        numFeats = getFeatsByLevel(level)
         start = end
         end = start+FEATS_GENOME_LENGTH
         self.feats = self.getFeats(numFeats,genes[start:end])
@@ -101,9 +91,10 @@ class Phenotype:
     def getFeats(self,numFeats:int,featGenes:array)->set:
         chosenFeats = set()
         for f in range(numFeats):
-            start = (f+1)*FEATS_GENOME_LENGTH
-            end = start - FEATS_GENOME_LENGTH
-            chosenFeats.add(FEATS[self.getChromosomeValue(featGenes[start:end])])
+            end = (f+1)*FEATS_CHROMOSOME_LENGTH
+            start = end - FEATS_CHROMOSOME_LENGTH
+            feat = self.getChromosomeValue(featGenes[start:end])
+            chosenFeats.add(FEATS[feat])
         return chosenFeats
 
     def __str__(self)->str:
@@ -256,13 +247,27 @@ FEATS = {
     40:"War Caster",
     41:"Weapon Master"
 }
-FEATS_GENOME_LENGTH = len(FEATS)-1
+FEATS_CHROMOSOME_LENGTH = (len(FEATS)-1)
+FEATS_GENOME_LENGTH = FEATS_CHROMOSOME_LENGTH*5
+def getFeatsByLevel(level:int)->int:
+    numFeats=0
+    if(level >=4):
+        numFeats+=1
+    if(level >= 8):
+        numFeats+=1
+    if(level >= 12):
+        numFeats+=1
+    if(level >= 16):
+        numFeats+=1
+    if(level >= 19):
+        numFeats+=1
+    return numFeats
 
 GENOME_LENGTH = ABILITY_SCORE_GENOME_LENGTH+RACES_GENOME_LENGTH+BACKGROUNDS_GENOME_LENGTH+CLASSES_GENOME_LENGTH+FEATS_GENOME_LENGTH
 
 def main():
     print(GENOME_LENGTH)
-    print(Phenotype([0]*GENOME_LENGTH,20))
+    print(Phenotype([1]*GENOME_LENGTH,4))
 
 if(__name__ == "__main__"):
     main()

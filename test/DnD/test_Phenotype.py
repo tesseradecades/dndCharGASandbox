@@ -84,11 +84,16 @@ class TestGetBackground(unittest.TestCase):
 class TestGetFeats(unittest.TestCase):
     def test_gets_appropriate_feats_from_all_0(self):
         #Arrange
+        phenotype = p.Phenotype(array('b',[0]*p.GENOME_LENGTH),1)
         #Act
+        feats = phenotype.getFeats(1,array('b',[0]*p.FEATS_GENOME_LENGTH))
         #Assert
-        self.assertTrue(False)
+        self.assertSetEqual(feats,{p.FEATS[0]})
+        
     def test_gets_appropriate_feats_from_all_1(self):
         #Arrange
+        phenotype = p.Phenotype(array('b',[0]*p.GENOME_LENGTH),1)
         #Act
+        feats = phenotype.getFeats(1,array('b',[1]*p.FEATS_GENOME_LENGTH))
         #Assert
-        self.assertTrue(False)
+        self.assertSetEqual(feats,{p.FEATS[p.FEATS_CHROMOSOME_LENGTH]})
