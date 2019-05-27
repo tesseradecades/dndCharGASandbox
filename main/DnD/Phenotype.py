@@ -1,7 +1,7 @@
 from array import array
 from enum import IntEnum
 try:
-    from Character import Character
+    from DnD.Character import Character
 except ModuleNotFoundError:#So that unittests can use this module
     from main.DnD.Character import Character
 

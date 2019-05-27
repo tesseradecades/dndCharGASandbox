@@ -1,5 +1,5 @@
 from array import array
-from GeneticAlgorithm import GeneticAlgorithm
+from GeneticAlgorithm.GeneticAlgorithm import GeneticAlgorithm
 """
 This version of the Genetic Algorithm defines "convergence" as "reaching the
 specified number of generations without a change in the maximum observed
