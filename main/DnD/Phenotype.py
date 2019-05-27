@@ -8,7 +8,23 @@ except ModuleNotFoundError:#So that unittests can use this module
 class Phenotype:
 
     def __init__(self,genes:array):
-        pass
+        start = 0
+        end = ABILITY_SCORE_GENOME_LENGTH+1
+        self.startingStats = self.getStats(genes[start:end])
+        start = end
+        end = start+RACES_GENOME_LENGTH
+        self.race = self.getRace(genes[start:end])
+        start = end
+        end = start+BACKGROUNDS_GENOME_LENGTH
+        self.background = self.getBackground(genes[start:end])
+        start = end
+        end = start+CLASSES_GENOME_LENGTH
+        self.characterClass = self.getClass(genes[start:end])
+        start = end
+        end = start+FEATS_GENOME_LENGTH
+        self.feats = self.getFeats(genes[start:end])
+        self.abilities = set()
+        
     
     def createCharacter(self,genes:array)-> Character:
         pass
@@ -180,6 +196,9 @@ CLASSES = {
     39:"Transmutation Wizard"
 }
 CLASSES_GENOME_LENGTH = len(CLASSES)-1
+
+FEATS = {}
+FEATS_GENOME_LENGTH = len(FEATS)-1
 
 GENOME_LENGTH = ABILITY_SCORE_GENOME_LENGTH+RACES_GENOME_LENGTH+BACKGROUNDS_GENOME_LENGTH+CLASSES_GENOME_LENGTH
 
