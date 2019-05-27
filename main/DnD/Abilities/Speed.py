@@ -1,10 +1,8 @@
 try:
     from Dnd.Abilities.Ability import Ability
-except ModuleNotFoundError:
-    from main.DnD.Abilities.Ability import Ability
-try:
     from DnD.Character import Character
 except ModuleNotFoundError:
+    from main.DnD.Abilities.Ability import Ability
     from main.DnD.Character import Character
 
 class Speed(Ability):

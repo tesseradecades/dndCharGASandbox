@@ -20,3 +20,12 @@ class test_Speed(TestCase):
         speed.executeConcreteAbility(character)
         #Assert
         self.assertEqual(character.flightSpeed,30)
+    def test_flight_speed_abstract(self):
+        #Arrange
+        baseStats = {}
+        character = Character(baseStats, set())
+        speed = FlightSpeed(30)
+        #Act
+        speed.executeAbstractAbility(character)
+        #Assert
+        self.assertEqual(character.armorClass,2)

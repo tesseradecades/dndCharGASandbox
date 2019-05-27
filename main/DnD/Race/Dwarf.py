@@ -2,6 +2,7 @@ from array import array
 
 from DnD.Abilities.AbilityScoreIncrease import AbilityScoreIncrease
 from DnD.Abilities.Darkvision import Darkvision
+from DnD.Abilities.Resistance import PoisonResistance
 from DnD.Abilities.Speed import Speed
 from DnD.Phenotype import AbilityScores
 class Dwarf():
@@ -9,7 +10,8 @@ class Dwarf():
         return {
             AbilityScoreIncrease(array('b',[AbilityScores.CONSTITUTION,AbilityScores.CONSTITUTION])),
             Speed(25),
-            Darkvision()
+            Darkvision(),
+            PoisonResistance()
             }
 class HillDwarf(Dwarf):
     def __init__(self):
