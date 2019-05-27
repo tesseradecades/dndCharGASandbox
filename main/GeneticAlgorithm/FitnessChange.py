@@ -53,7 +53,7 @@ def fitnessFunction(genome: array)-> float:
 def main():
     genomeLength = 10
     ga = FitnessChange()
-    best = ga.run(genomeLength,genomeLength*genomeLength,fitnessFunction)
+    best = ga.run(genomeLength,genomeLength**1.50732421875,fitnessFunction)
     print(best)
 if __name__ == '__main__':
     main()
