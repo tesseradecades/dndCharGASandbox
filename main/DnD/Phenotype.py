@@ -7,7 +7,7 @@ except ModuleNotFoundError:#So that unittests can use this module
 
 class Phenotype:
 
-    def __init__(self,genes:array):
+    def __init__(self,genes:array,level:int):
         start = 0
         end = ABILITY_SCORE_GENOME_LENGTH+1
         self.startingStats = self.getStats(genes[start:end])
@@ -20,9 +20,20 @@ class Phenotype:
         start = end
         end = start+CLASSES_GENOME_LENGTH
         self.characterClass = self.getClass(genes[start:end])
+        numFeats = 0
+        if(level >=4):
+            numFeats+=1
+        if(level >= 8):
+            numFeats+=1
+        if(level >= 12):
+            numFeats+=1
+        if(level >= 16):
+            numFeats+=1
+        if(level >= 19):
+            numFeats+=1
         start = end
         end = start+FEATS_GENOME_LENGTH
-        self.feats = self.getFeats(genes[start:end])
+        self.feats = self.getFeats(numFeats,genes[start:end])
         self.abilities = set()
         
     
@@ -87,15 +98,19 @@ class Phenotype:
         return BACKGROUNDS[self.getChromosomeValue(backgroundGenes)]
     def getClass(self,classGenes:array):
         return CLASSES[self.getChromosomeValue(classGenes)]
-    def getFeats(self,featGenes:array)->set:
-        return set()
+    def getFeats(self,numFeats:int,featGenes:array)->set:
+        chosenFeats = set()
+        for f in range(numFeats):
+            start = (f+1)*FEATS_GENOME_LENGTH
+            end = start - FEATS_GENOME_LENGTH
+            chosenFeats.add(FEATS[self.getChromosomeValue(featGenes[start:end])])
+        return chosenFeats
 
     def __str__(self)->str:
         toString = f"Race:\t\t{self.race}\
             \nBackground:\t{self.background}\
             \nClass:\t\t{self.characterClass}\
             \nStarting Stats:\t{self.startingStats}\
-            \nAbilities:\t{self.abilities}\
             \nFeats:\t\t{self.feats}"
         return toString
 
@@ -197,14 +212,57 @@ CLASSES = {
 }
 CLASSES_GENOME_LENGTH = len(CLASSES)-1
 
-FEATS = {}
+FEATS = {
+    0:"Alert",
+    1:"Athlete",
+    2:"Actor",
+    3:"Charger",
+    4:"Crossbow Expert",
+    5:"Defensive Duelist",
+    6:"Dual Wielder",
+    7:"Dungeon Delver",
+    8:"Durable",
+    9:"Elemental Adept",
+    10:"Grappler",
+    11:"Great Weapon Master",
+    12:"Healer",
+    13:"Heavily Armored",
+    14:"Heavy Armor Master",
+    15:"Inspiring Leader",
+    16:"Keen Mind",
+    17:"Lightly Armored",
+    18:"Linguist",
+    19:"Lucky",
+    20:"Mage Slayer",
+    21:"Magic Initiate",
+    22:"Martial Adept",
+    23:"Medium Armor Master",
+    24:"Mobile",
+    25:"Moderately Armored",
+    26:"Mounted Combatant",
+    27:"Observant",
+    28:"Polearm Master",
+    29:"Resilient",
+    30:"Ritual Caster",
+    31:"Savage Attacker",
+    32:"Sentinel",
+    33:"Sharpshooter",
+    34:"Shield Master",
+    35:"Skilled",
+    36:"Skulker",
+    37:"Spell Sniper",
+    38:"Tavern Brawler",
+    39:"Tough",
+    40:"War Caster",
+    41:"Weapon Master"
+}
 FEATS_GENOME_LENGTH = len(FEATS)-1
 
-GENOME_LENGTH = ABILITY_SCORE_GENOME_LENGTH+RACES_GENOME_LENGTH+BACKGROUNDS_GENOME_LENGTH+CLASSES_GENOME_LENGTH
+GENOME_LENGTH = ABILITY_SCORE_GENOME_LENGTH+RACES_GENOME_LENGTH+BACKGROUNDS_GENOME_LENGTH+CLASSES_GENOME_LENGTH+FEATS_GENOME_LENGTH
 
 def main():
     print(GENOME_LENGTH)
-    print(Phenotype([0]*GENOME_LENGTH))
+    print(Phenotype([0]*GENOME_LENGTH,20))
 
 if(__name__ == "__main__"):
     main()
